@@ -124,3 +124,6 @@ Lion-O can escape at a speed of 23.333333 km/h!
 ```text
 Lion-O can escape at a speed of 64.548387 km/h!
 ```
+
+## Caso de Prueba 3:
+***Pseudografo Ralo con 1 Puerto de Salida y Captura Inevitable***
