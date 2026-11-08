@@ -30,5 +30,9 @@ $$
 *   $dist_\gamma(s,p)$ es la distancia exacta recorrida desde el vértice de inicio $s$ hasta el punto $p$ a lo largo de la ruta específica $\gamma$, evaluada según la función de peso $w$.
 *   $dist_G(r,p)$ es la distancia del camino más corto posible en todo el grafo $G$ desde la posición inicial de los mutantes $r$ hasta el punto $p$, evaluada según la función de peso $w$.
 *   El valor $-1$ es el indicador numérico de fallo, utilizado cuando la inecuación de distancias y tiempos resulta insatisfactible para cualquier trayectoria (es decir, la captura es inminente e inevitable sin importar la velocidad $v_L$).
-  
+
+# Casos de Prueba:
+## Caso de Prueba 1:
+***Pseudografo Ralo con 2 Puertos de Salida***
+
 
