@@ -96,4 +96,7 @@ Lion-O can escape at a speed of 23.333333 km/h!
 7 1
 4 6
 ```
+**Componentes del Caso:**
+* **Grafo:** Contiene 8 intersecciones con 12 carreteras distintas cada una con sus distancias.
+* **Velocidad de los enemigos $(v)$:** Los mutantes viajan a una velocidad máxima constante de 69 km/h
 
