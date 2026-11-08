@@ -34,5 +34,18 @@ $$
 # Casos de Prueba:
 ## Caso de Prueba 1:
 ***Pseudografo Ralo con 2 Puertos de Salida***
-
-
+```text
+8 10 2 35 
+1 3 6 
+4 3 10
+3 5 8
+1 5 7 
+2 3 10
+6 8 5
+8 7 7
+2 4 9
+1 7 30
+4 7 12
+1 6
+4 7
+```
