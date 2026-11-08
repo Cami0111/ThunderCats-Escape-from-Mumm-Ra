@@ -17,7 +17,7 @@ $$
 S = 
 \begin{cases} 
 \min(v_L) & \text{si } \exists \gamma \in \Gamma(s, K) \text{ tal que } \forall p \in \gamma, \frac{dist_\gamma(s,p)}{v_L} < \frac{dist_G(r,p)}{v} \\ 
--1 & \text{si no existe tal } v_L \text{ para ninguna trayectoria } \pi 
+-1 & \text{si no existe tal } v_L \text{ para ninguna trayectoria } \gamma 
 \end{cases}
 $$
 
