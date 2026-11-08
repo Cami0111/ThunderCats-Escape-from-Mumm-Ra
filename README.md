@@ -159,3 +159,7 @@ Lion-O can escape at a speed of 64.548387 km/h!
 * Debido a la forma del Grafo, el nodo 3 (la única salida) es un vértice cuya única conexión al resto del mapa es a través del nodo 6. Esto convierte al nodo 6 en un paso obligatorio.
 * Al calcular las distancias, el sistema detectará que la distancia de Lion-O hacia ese punto crítico es de mínimo 140 unidades (pasando por el nodo 8), mientras que la distancia de los mutantes a ese mismo punto es exactamente 0 (ya que inician allí).
 * El sistema matemáticamente comprobará que el tiempo que le toma a los mutantes llegar al nodo 6 es $0$ $segundos$, por lo que la velocidad requerida para que Lion-O cruce ese nodo antes que los mutantes tiende a infinito $(V_L = ∞)$. Como la posibilidad de escape se rompe en ese punto, el sistema debe descartar todas las rutas y declarar la captura inevitable.
+
+**Representación del Grafo:**
+
+![Grafo Caso 3](Grafo3.jpg)
