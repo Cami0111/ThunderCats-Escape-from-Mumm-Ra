@@ -49,3 +49,7 @@ $$
 1 6
 4 7
 ```
+
+**Componentes del Caso:**
+* **Grafo:** Contiene 8 intersecciones con 10 carreteras distintas cada una con sus distancias.
+* **Velocidad de los enemigos $(v)$:** Los mutantes viajan a una velocidad máxima constante de 35 km/h
