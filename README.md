@@ -11,7 +11,6 @@
  - Una constante $v \in \mathbb{R}^+$, que indica la velocidad maxima inmutable de la nave de los mutantes.
 
 ## Salida:
-
 Se espera obtener un valor $S \in \mathbb{R}^+ \cup \{-1\}$, el cual es función estrictamente de los datos definidos en la entrada $(G, w, s, r, K, v)$. El valor de $S$ se define formalmente a través de la siguiente expresión:
 
 $$
@@ -49,7 +48,6 @@ $$
 1 6
 4 7
 ```
-
 **Componentes del Caso:**
 * **Grafo:** Contiene 8 intersecciones con 10 carreteras distintas cada una con sus distancias.
 * **Velocidad de los enemigos $(v)$:** Los mutantes viajan a una velocidad máxima constante de 35 km/h
@@ -96,6 +94,7 @@ Lion-O can escape at a speed of 23.333333 km/h!
 7 1
 4 6
 ```
+
 **Componentes del Caso:**
 * **Grafo:** Contiene 8 intersecciones con 12 carreteras distintas cada una con sus distancias.
 * **Velocidad de los enemigos $(v)$:** Los mutantes viajan a una velocidad máxima constante de 69 km/h
@@ -104,13 +103,12 @@ Lion-O can escape at a speed of 23.333333 km/h!
 
 **Explicación y Definición:**
 
-* Este caso de prueba está diseñado para evaluar la capacidad del algoritmo de descartar rutas que están estratégicamente bloqueadas por el enemigo (intercepciones inevitables) y priorizar la supervivencia calculando la velocidad sobre la única ruta viable.
+* Este caso de prueba está diseñado para evaluar la capacidad del sistema de descartar rutas que están estratégicamente bloqueadas por el enemigo (intercepciones inevitables) y priorizar la supervivencia calculando la velocidad sobre la única ruta viable.
 * Al observar el mapa y las distancias, Lion-O tiene dos nodos de salida posibles (6 y 4), pero su viabilidad es drásticamente distinta:
 1. **Intento de escape por el nodo 6:** 
 * Para que Lion-O llegue al nodo 6 por su ruta más corta (7 -> 3 -> 2 -> 8 -> 6), está obligado a pasar por el nodo 8, acumulando una distancia de 16 hasta ese punto.
 * Sin embargo, los mutantes comienzan en el nodo 1 y tienen una conexión directa al nodo 8 con una distancia de tan solo 14. 
-* Dado que los mutantes pueden llegar al nodo 8 antes que Lion-O (independientemente de la velocidad de este último), intentar huir hacia el nodo 6 garantiza la captura. El algoritmo debe descartar esta salida por completo.
-
+* Dado que los mutantes pueden llegar al nodo 8 antes que Lion-O (independientemente de la velocidad de este último), intentar huir hacia el nodo 6 garantiza la captura. El sistema debe descartar esta salida por completo.
 2. **Intento de escape por el nodo 4:** 
 * La alternativa es que Lion-O huya hacia el nodo 4 utilizando la ruta (7 -> 3 -> 5 -> 4), lo que suma una distancia total de 29.
 * Para interceptarlo en esa salida, los mutantes tomarían su camino más corto (1 -> 5 -> 4), el cual suma una distancia de 31.
@@ -146,6 +144,7 @@ Lion-O can escape at a speed of 64.548387 km/h!
 5 6
 3
 ```
+
 **Componentes del Caso:**
 * **Grafo:** Contiene 10 intersecciones con 14 carreteras distintas cada una con sus distancias.
 * **Velocidad de los enemigos $(v)$:** Los mutantes viajan a una velocidad máxima constante de 120 km/h
