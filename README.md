@@ -53,3 +53,5 @@ $$
 **Componentes del Caso:**
 * **Grafo:** Contiene 8 intersecciones con 10 carreteras distintas cada una con sus distancias.
 * **Velocidad de los enemigos $(v)$:** Los mutantes viajan a una velocidad máxima constante de 35 km/h
+* **Posiciones iniciales:** Lion-O arranca su escape desde el nodo 1, mientras que los mutantes comienzan la persecución desde el nodo 6. 
+* **Salidas seguras:** Las naves espaciales para escapar están ubicadas en los nodos 4 y 7.
