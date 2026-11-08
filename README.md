@@ -76,3 +76,7 @@ $$
 ```text
 Lion-O can escape at a speed of 23.333333 km/h!
 ```
+
+## Caso de Prueba 2:
+***Pseudografo Ralo con 2 Puertos de Salida y Rutas Bloqueadas***
+
