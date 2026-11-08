@@ -68,3 +68,6 @@ $$
 * Si Lion-O se dirige al nodo 4 (pasando por el nodo 3), solo tiene que recorrer una distancia total de 16.
 * Para que los mutantes logren alcanzar esa misma intersección desde su punto de inicio, deben recorrer un trayecto más largo (nodos 6 -> 8 -> 7 -> 4) sumando una distancia de 24.
 
+**Representación del Grafo:**
+
+![Grafo Caso 1](Grafo1.jpeg)
