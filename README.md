@@ -101,3 +101,8 @@ Lion-O can escape at a speed of 23.333333 km/h!
 * **Velocidad de los enemigos $(v)$:** Los mutantes viajan a una velocidad máxima constante de 69 km/h
 * **Posiciones iniciales:** Lion-O arranca su escape desde el nodo 7, mientras que los mutantes comienzan la persecución desde el nodo 1. 
 * **Salidas seguras:** Las naves espaciales para escapar están ubicadas en los nodos 4 y 6.
+
+**Explicación y Definición:**
+
+* Este caso de prueba está diseñado para evaluar la capacidad del algoritmo de descartar rutas que están estratégicamente bloqueadas por el enemigo (intercepciones inevitables) y priorizar la supervivencia calculando la velocidad sobre la única ruta viable.
+* Al observar el mapa y las distancias, Lion-O tiene dos nodos de salida posibles (6 y 4), pero su viabilidad es drásticamente distinta:
