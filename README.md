@@ -71,3 +71,8 @@ $$
 **Representación del Grafo:**
 
 ![Grafo Caso 1](Grafo1.jpeg)
+
+**Salida Esperada:**
+```text
+Lion-O can escape at a speed of 23.333333 km/h!
+```
