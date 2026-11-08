@@ -163,3 +163,8 @@ Lion-O can escape at a speed of 64.548387 km/h!
 **Representación del Grafo:**
 
 ![Grafo Caso 3](Grafo3.jpeg)
+
+**Salida Esperada:**
+```text
+Mumm-Ra captures Lion-O!
+```
