@@ -7,7 +7,7 @@
 
 ## Integrantes:
 ### Juan Sebastián Rojas Huerter
-### Maria Camila Gaitán 
+### Maria Camila Gaitán Angel 
 
 ![Logo Javeriana Cali](Jave.png)
 
