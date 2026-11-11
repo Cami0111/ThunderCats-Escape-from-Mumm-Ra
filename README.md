@@ -241,6 +241,32 @@ Esta Sección se recopila las ideas que se consideraron en el Transcurso de la C
 ### Usar listas de adyacencia
 * Esta Representación guarda para cada intersección solo las vías que salen de ella, por lo que para el Contexto del Problema es una Estructura Óptima y además Dijkstra junto con otros recorridos y procedimientos usan recorridos sobre vecinos. Por otro lado, la lista de adyacencia también permite recorrer cada vía en tiempo proporcional al tamaño de la red. Por estas Razones Creemos que puede Ser Util para Nuestro Caso su Uso.
 
+# Desarrollo Posible Entrada de Datos del Programa
+
+```text
+from sys import stdin
+def main():
+    entrada = stdin.readline()
+    t = int(entrada)
+    for _ in range(t):
+        n, m, k, v = map(int, stdin.readline().split())
+        grafo = [[] for _ in range(n)]
+        for _ in range(m):
+            a, b, d = map(int, stdin.readline().split())
+            a -= 1
+            b -= 1
+            grafo[a].append((b, d))
+            grafo[b].append((a, d))
+        lion, mumm_ra = map(int, stdin.readline().split())
+        salidas = list(map(int, stdin.readline().split()))
+        print(f"m:{m},n:{n},k:{k},v:{v}")
+        print(*grafo)
+        print(f"lion:{lion}  mumm_ra:{mumm_ra}")
+        print(*salidas)
+if __name__ == "__main__":
+    main()
+```
+
 ## Bitacora del Proyecto
 | Dia/ Hora                        | Actividades                                                                                                                                                                                                                                                                                                                                                                                                                                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
