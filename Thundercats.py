@@ -12,3 +12,5 @@ def funcion_para_calcular_distancias_minimas(grafo_de_conexiones, nodo_origen):
                 nueva_distancia_calculada = distancia_actual + distancia_del_camino
                 if nueva_distancia_calculada < distancias_que_se_han_calculado[nodo_vecino]:
                     distancias_que_se_han_calculado[nodo_vecino] = nueva_distancia_calculada
+                    heappush(cola_de_prioridad, (nueva_distancia_calculada, nodo_vecino))
+    return distancias_que_se_han_calculado
