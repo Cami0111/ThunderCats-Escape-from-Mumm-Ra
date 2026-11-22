@@ -15,7 +15,7 @@ def funcion_para_calcular_distancias_minimas(grafo_de_conexiones, nodo_origen):
                     distancias_que_se_han_calculado[nodo_vecino] = nueva_distancia_calculada
                     heappush(cola_de_prioridad, (nueva_distancia_calculada, nodo_vecino))
     return distancias_que_se_han_calculado
-def funcion_que_indica_si_existe_una_ruta_de_escape_posible(grafo_de_conexiones,nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas):
+def funcion_que_indica_si_existe_una_ruta_de_escape_posible(grafo_de_conexiones, nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas):
     se_encontro_una_ruta_posible = False
     if nodo_de_inicio_de_lion != nodo_de_inicio_de_mumm_ra:
         if nodo_de_inicio_de_lion in salidas: se_encontro_una_ruta_posible = True
@@ -23,6 +23,10 @@ def funcion_que_indica_si_existe_una_ruta_de_escape_posible(grafo_de_conexiones,
             nodos_que_se_han_visitado = [False] * len(grafo_de_conexiones)
             nodos_que_se_han_visitado[nodo_de_inicio_de_lion] = True
             cola_de_nodos = deque([nodo_de_inicio_de_lion])
+            while cola_de_nodos and not se_encontro_una_ruta_posible:
+                nodo_actual = cola_de_nodos.popleft()
+                for nodo_vecino, _ in grafo_de_conexiones[nodo_actual]:
+                    if nodo_vecino != nodo_de_inicio_de_mumm_ra and not nodos_que_se_han_visitado[nodo_vecino]:
 
         
     return se_encontro_una_ruta_posible
