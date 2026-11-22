@@ -1,6 +1,7 @@
 import sys;
 from sys import stdin, stdout;
 from heapq import heappop, heappush
+from collections import deque;
 def funcion_para_calcular_distancias_minimas(grafo_de_conexiones, nodo_origen):
     distancias_que_se_han_calculado = [float("inf")] * len(grafo_de_conexiones)
     distancias_que_se_han_calculado[nodo_origen] = 0
@@ -14,10 +15,14 @@ def funcion_para_calcular_distancias_minimas(grafo_de_conexiones, nodo_origen):
                     distancias_que_se_han_calculado[nodo_vecino] = nueva_distancia_calculada
                     heappush(cola_de_prioridad, (nueva_distancia_calculada, nodo_vecino))
     return distancias_que_se_han_calculado
-def funcion_que_indica_si_existe_una_ruta_de_escape_posible(nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas):
+def funcion_que_indica_si_existe_una_ruta_de_escape_posible(grafo_de_conexiones,nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas):
     se_encontro_una_ruta_posible = False
     if nodo_de_inicio_de_lion != nodo_de_inicio_de_mumm_ra:
         if nodo_de_inicio_de_lion in salidas: se_encontro_una_ruta_posible = True
+        else:
+            nodos_que_se_han_visitado = [False] * len(grafo_de_conexiones)
+            nodos_que_se_han_visitado[nodo_de_inicio_de_lion] = True
+            cola_de_nodos = deque([nodo_de_inicio_de_lion])
 
         
     return se_encontro_una_ruta_posible
