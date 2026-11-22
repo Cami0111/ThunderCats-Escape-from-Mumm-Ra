@@ -27,6 +27,8 @@ def funcion_que_indica_si_existe_una_ruta_de_escape_posible(grafo_de_conexiones,
                 nodo_actual = cola_de_nodos.popleft()
                 for nodo_vecino, _ in grafo_de_conexiones[nodo_actual]:
                     if nodo_vecino != nodo_de_inicio_de_mumm_ra and not nodos_que_se_han_visitado[nodo_vecino]:
-
-        
+                        if nodo_vecino in salidas:
+                            se_encontro_una_ruta_posible = True
+                        nodos_que_se_han_visitado[nodo_vecino] = True
+                        cola_de_nodos.append(nodo_vecino)       
     return se_encontro_una_ruta_posible
