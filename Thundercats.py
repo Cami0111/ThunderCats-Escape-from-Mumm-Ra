@@ -34,3 +34,8 @@ def funcion_que_indica_si_existe_una_ruta_de_escape_posible(grafo_de_conexiones,
 def funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada(grafo_conexiones, nodo_de_inicio_de_lion, salidas, velocidad_de_mumm_ra, velocidad_a_probar, distancias_del_enemigo_a_cada_punto):
     se_ha_logrado_un_escape = False
     if nodo_de_inicio_de_lion in salidas: se_ha_logrado_un_escape = True
+    elif velocidad_a_probar > 0:
+        arreglo_de_distancias_maximas_permitidas_para_recorrer = [velocidad_a_probar * distancia / velocidad_de_mumm_ra for distancia in distancias_del_enemigo_a_cada_punto]
+        distancias_a_cada_punto_de_lion = [float("inf")] * len(grafo_conexiones)
+        distancias_a_cada_punto_de_lion[nodo_de_inicio_de_lion] = 0
+        cola_de_prioridad = [(0, nodo_de_inicio_de_lion)]
