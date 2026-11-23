@@ -39,3 +39,7 @@ def funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada(grafo_conexion
         distancias_a_cada_punto_de_lion = [float("inf")] * len(grafo_conexiones)
         distancias_a_cada_punto_de_lion[nodo_de_inicio_de_lion] = 0
         cola_de_prioridad = [(0, nodo_de_inicio_de_lion)]
+        while cola_de_prioridad and not se_ha_logrado_un_escape:
+            distancia_actual, nodo_actual = heappop(cola_de_prioridad)
+            if distancia_actual == distancias_a_cada_punto_de_lion[nodo_actual]:
+                if nodo_actual in salidas: se_ha_logrado_un_escape = True
