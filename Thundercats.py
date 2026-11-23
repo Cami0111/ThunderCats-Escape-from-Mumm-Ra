@@ -46,3 +46,7 @@ def funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada(grafo_conexion
                 if not se_ha_logrado_un_escape:
                     for nodo_vecino, distancia_del_camino in grafo_conexiones[nodo_actual]:
                         nueva_distancia_que_se_ha_calculado = distancia_actual + distancia_del_camino
+                        if nueva_distancia_que_se_ha_calculado < distancias_a_cada_punto_de_lion[nodo_vecino] and nueva_distancia_que_se_ha_calculado < arreglo_de_distancias_maximas_permitidas_para_recorrer[nodo_vecino]:
+                            distancias_a_cada_punto_de_lion[nodo_vecino] = nueva_distancia_que_se_ha_calculado
+                            heappush(cola_de_prioridad, (nueva_distancia_que_se_ha_calculado, nodo_vecino))
+    return se_ha_logrado_un_escape
