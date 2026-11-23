@@ -1,7 +1,6 @@
-import sys;
-from sys import stdin, stdout;
+from sys import stdin, stdout
 from heapq import heappop, heappush
-from collections import deque;
+from collections import deque
 def funcion_para_calcular_distancias_minimas(grafo_de_conexiones, nodo_origen):
     distancias_que_se_han_calculado = [float("inf")] * len(grafo_de_conexiones)
     distancias_que_se_han_calculado[nodo_origen] = 0
@@ -30,5 +29,8 @@ def funcion_que_indica_si_existe_una_ruta_de_escape_posible(grafo_de_conexiones,
                         if nodo_vecino in salidas:
                             se_encontro_una_ruta_posible = True
                         nodos_que_se_han_visitado[nodo_vecino] = True
-                        cola_de_nodos.append(nodo_vecino)       
+                        cola_de_nodos.append(nodo_vecino)
     return se_encontro_una_ruta_posible
+def funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada(grafo_conexiones, nodo_de_inicio_de_lion, salidas, velocidad_de_mumm_ra, velocidad_a_probar, distancias_del_enemigo_a_cada_punto):
+    se_ha_logrado_un_escape = False
+    if nodo_de_inicio_de_lion in salidas: se_ha_logrado_un_escape = True
