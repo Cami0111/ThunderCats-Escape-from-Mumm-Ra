@@ -44,9 +44,13 @@ def funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada(grafo_conexion
             if distancia_actual == distancias_a_cada_punto_de_lion[nodo_actual]:
                 if nodo_actual in salidas: se_ha_logrado_un_escape = True
                 if not se_ha_logrado_un_escape:
-                    for nodo_vecino, distancia_del_camino in grafo_conexiones[nodo_actual]:
                         nueva_distancia_que_se_ha_calculado = distancia_actual + distancia_del_camino
                         if nueva_distancia_que_se_ha_calculado < distancias_a_cada_punto_de_lion[nodo_vecino] and nueva_distancia_que_se_ha_calculado < arreglo_de_distancias_maximas_permitidas_para_recorrer[nodo_vecino]:
                             distancias_a_cada_punto_de_lion[nodo_vecino] = nueva_distancia_que_se_ha_calculado
                             heappush(cola_de_prioridad, (nueva_distancia_que_se_ha_calculado, nodo_vecino))
     return se_ha_logrado_un_escape
+def funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar(grafo_conexiones, nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas, velocidad_de_mumm_ra):
+    velocidad_final_minima_maxima_hallada_para_escapar = None
+    if nodo_de_inicio_de_lion in salidas:
+        if nodo_de_inicio_de_lion != nodo_de_inicio_de_mumm_ra: velocidad_final_minima_maxima_hallada_para_escapar = 0.0
+        velocidad_final_minima_maxima_hallada_para_escapar = None
