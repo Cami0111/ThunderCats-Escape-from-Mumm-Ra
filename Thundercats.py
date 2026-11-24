@@ -82,3 +82,7 @@ def funcion_que_ejecuta_todo_el_programa():
             grafo_conexiones[b].append((a, distancia_del_camino))
         lion, mumm_ra = map(int, stdin.readline().split())
         nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra = lion - 1, mumm_ra - 1
+        lista_de_las_salidas = list(map(int, stdin.readline().split()))
+        salidas = set(salida - 1 for salida in lista_de_las_salidas)
+        velocidad_final_minima_maxima_hallada_para_escapar = funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar(grafo_conexiones, nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas, velocidad_de_mumm_ra)
+        if velocidad_final_minima_maxima_hallada_para_escapar is None: arreglo_de_respuestas_finales.append("Mumm-Ra captures Lion-O!")
