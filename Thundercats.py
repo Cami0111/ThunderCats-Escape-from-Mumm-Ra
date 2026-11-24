@@ -65,3 +65,7 @@ def funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_esca
     while limite_superior_de_la_busqueda_binaria - limite_inferior_de_la_busqueda_binaria > epsilon:
         velocidad_media_que_se_tiene = (limite_inferior_de_la_busqueda_binaria + limite_superior_de_la_busqueda_binaria) / 2
         if funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada(grafo_conexiones, nodo_de_inicio_de_lion, salidas, velocidad_de_mumm_ra, velocidad_media_que_se_tiene, distancias_de_mumm_ra): limite_superior_de_la_busqueda_binaria = velocidad_media_que_se_tiene
+        else: limite_inferior_de_la_busqueda_binaria = velocidad_media_que_se_tiene
+    velocidad_final_minima_maxima_hallada_para_escapar = limite_superior_de_la_busqueda_binaria
+    return velocidad_final_minima_maxima_hallada_para_escapar
+def funcion_que_ejecuta_todo_el_programa():
