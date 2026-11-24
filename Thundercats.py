@@ -75,3 +75,10 @@ def funcion_que_ejecuta_todo_el_programa():
     for _ in range(casos_de_prueba):
         numero_de_nodos, numero_de_caminos, numero_de_salidas, velocidad_de_mumm_ra = map(int, stdin.readline().split())
         grafo_conexiones = [[] for _ in range(numero_de_nodos)]
+        for _ in range(numero_de_caminos):
+            a, b, distancia_del_camino = map(int, stdin.readline().split())
+            a, b = a - 1, b - 1
+            grafo_conexiones[a].append((b, distancia_del_camino))
+            grafo_conexiones[b].append((a, distancia_del_camino))
+        lion, mumm_ra = map(int, stdin.readline().split())
+        nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra = lion - 1, mumm_ra - 1
