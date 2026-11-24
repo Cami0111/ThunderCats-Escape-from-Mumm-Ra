@@ -69,3 +69,9 @@ def funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_esca
     velocidad_final_minima_maxima_hallada_para_escapar = limite_superior_de_la_busqueda_binaria
     return velocidad_final_minima_maxima_hallada_para_escapar
 def funcion_que_ejecuta_todo_el_programa():
+    entrada = stdin.readline().strip()
+    casos_de_prueba = int(entrada)
+    arreglo_de_respuestas_finales = []
+    for _ in range(casos_de_prueba):
+        numero_de_nodos, numero_de_caminos, numero_de_salidas, velocidad_de_mumm_ra = map(int, stdin.readline().split())
+        grafo_conexiones = [[] for _ in range(numero_de_nodos)]
