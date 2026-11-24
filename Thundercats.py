@@ -86,3 +86,6 @@ def funcion_que_ejecuta_todo_el_programa():
         salidas = set(salida - 1 for salida in lista_de_las_salidas)
         velocidad_final_minima_maxima_hallada_para_escapar = funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar(grafo_conexiones, nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas, velocidad_de_mumm_ra)
         if velocidad_final_minima_maxima_hallada_para_escapar is None: arreglo_de_respuestas_finales.append("Mumm-Ra captures Lion-O!")
+        else: arreglo_de_respuestas_finales.append(f"Lion-O can escape at a speed of {velocidad_final_minima_maxima_hallada_para_escapar:.6f} km/h!")
+    if arreglo_de_respuestas_finales: stdout.write("\n".join(arreglo_de_respuestas_finales) + "\n")
+if __name__ == "__main__": funcion_que_ejecuta_todo_el_programa()
