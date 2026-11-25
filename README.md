@@ -13,11 +13,27 @@
 
 ## Pontificia Universidad Javeriana Cali
 ## Facultad de Ingeniería y Ciencias
-## Noviembre 11, 2026
+## Noviembre 24, 2026
 ## Cali, Colombia
 
+## Contenido
+
+- [Primera parte del informe](#primera-parte-del-informe)
+  - Introducción y descripción del problema
+  - Especificación y casos inventados
+  - Ideas consideradas y prototipo inicial
+- [Segunda parte del informe](#segunda-parte-del-informe)
+  - Estrategia y diagrama del programa
+  - Cambios durante el desarrollo
+  - Trazas de los casos unificados
+  - Complejidad temporal y espacial
+  - Cierre, requisitos y bitácora
+
+---
+
+# Primera Parte del Informe
 ## Introducción
-El presente documento constituye la Primera Entrega del Proyecto de la Asignatura Árboles y Grafos. En él se detalla primero la Descripción General del Problema, expresada con Nuestras Propias Palabras. Tras ello se muestra la Especificación del Problema. Luego se describen los 3 Casos de Prueba Planteados por Nosotros junto a su Resultado Esperado. Siguiente a esto, planteamos la Explicación General de las Ideas que se han Considerado para Resolver el Problema, indicando los aspectos que aún debemos perfeccionar y las dificultades que todavía no sabemos cómo resolver. Finalmente, se listan los Registros de la Bitácora correspondientes al Trabajo Realizado hasta la Fecha.
+Este documento integra el trabajo iniciado para la primera entrega y lo completa como informe final del proyecto de Árboles y Grafos. Conservamos la descripción, la especificación, los tres casos de prueba iniciales, las ideas consideradas y la bitácora; además, incorporamos la estrategia definitiva, el flujo lógico de la implementación, los cambios frente a la primera versión, las trazas de los 40 casos del archivo unificado y el análisis de complejidad.
 
 ## Descripción del Problema
 Este Problema nos Plantea un escenario súper chevre en el que el protagonista, Lion-O, es perseguido por Mumm-Ra y sus Mutantes y debe huir rapido por una red de calles hacía unos puertos espaciales donde se encuentran unas naves para poder escapar de la región. El problema es que Mumm-Ra y sus mutantes ya saben dónde está y se preparan para atraparlo. Ambos personajes arrancan exactamente al mismo tiempo y se pueden mover en cualquier dirección, hasta pueden cambiar de sentido en plena calle y no solo en las esquinas. 
@@ -34,12 +50,12 @@ Entonces, nuestro gran objetivo es determinar la velocidad más bajita necesaria
  - Un subconjunto de nodos objetivo $K \subseteq V$, con $|K| = k$, que representa las ubicaciones de las salidas del puerto espacial.
  - Una constante $v \in \mathbb{R}^+$, que indica la velocidad maxima inmutable de la nave de los mutantes.
 ### Salida:
-Se espera obtener un valor $S \in \mathbb{R}^+ \cup \{-1\}$, el cual es función estrictamente de los datos definidos en la entrada $(G, w, s, r, K, v)$. El valor de $S$ se define formalmente a través de la siguiente expresión:
+Se espera obtener un valor $S \in \mathbb{R}^+ \cup \{None\}$, el cual es función estrictamente de los datos definidos en la entrada $(G, w, s, r, K, v)$. El valor de $S$ se define formalmente a través de la siguiente expresión:
 $$
 S = 
 \begin{cases} 
 \min(v_L) & \text{si } \exists \gamma \in \Gamma(s, K) \text{ tal que } \forall p \in \gamma, \frac{dist_\gamma(s,p)}{v_L} < \frac{dist_G(r,p)}{v} \\ 
--1 & \text{si no existe tal } v_L \text{ para ninguna trayectoria } \gamma 
+None& \text{si no existe tal } v_L \text{ para ninguna trayectoria } \gamma 
 \end{cases}
 $$
 ### **Donde se definen los siguientes términos:**
@@ -48,7 +64,7 @@ $$
 *   $p$ representa cualquier punto continuo (ya sea un vértice o un punto fraccionario intermedio en una arista) que pertenezca a la trayectoria elegida $\gamma$.
 *   $dist_\gamma(s, p)$ es la distancia exacta recorrida desde el vértice de inicio $s$ hasta el punto $p$ a lo largo de la ruta específica $\gamma$, evaluada según la función de peso $w$.
 *   $dist_G(r, p)$ es la distancia del camino más corto posible en todo el grafo $G$ desde la posición inicial de los mutantes $r$ hasta el punto $p$, evaluada según la función de peso $w$.
-*   El valor $-1$ es el indicador numérico de fallo, utilizado cuando la inecuación de distancias y tiempos resulta insatisfacible para cualquier trayectoria (es decir, la captura es inminente e inevitable sin importar la velocidad $v_L$).
+*   El valor $None$ es el indicador numérico de fallo, utilizado cuando la inecuación de distancias y tiempos resulta insatisfacible para cualquier trayectoria (es decir, la captura es inminente e inevitable sin importar la velocidad $v_L$).
 
 ## Casos de Prueba:
 ### Caso de Prueba 1: ***Pseudo grafo Ralo con 2 Puertos de Salida***
@@ -241,8 +257,7 @@ Esta Sección se recopila las ideas que se consideraron en el Transcurso de la C
 ### Usar listas de adyacencia
 * Esta Representación guarda para cada intersección solo las vías que salen de ella, por lo que para el Contexto del Problema es una Estructura Óptima y además Dijkstra junto con otros recorridos y procedimientos usan recorridos sobre vecinos. Por otro lado, la lista de adyacencia también permite recorrer cada vía en tiempo proporcional al tamaño de la red. Por estas Razones Creemos que puede Ser Util para Nuestro Caso su Uso.
 
-# Desarrollo Posible Entrada de Datos del Programa
-
+## Desarrollo Inicial Entrada de Datos del Programa
 ```text
 from sys import stdin
 def main():
@@ -266,16 +281,1334 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+# Segunda parte del informe
 
-## Bitacora del Proyecto
-| Dia/ Hora                        | Actividades                                                                                                                                                                                                                                                                                                                                                                                                                                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Oct. 28: 9:00a.m. - 10:00 a.m    | Primera revision del documento                                                                                                                                                                                                                                                                                                                                                                                                                             | Se hizo una primera lectura del enunciado. Se entendió de forma general que el problema es una persecución en un mapa: Lion-O debe llegar a alguna salida del puerto espacial sin que lo alcancen los mutantes de Mumm-Ra.                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| Oct. 28: 1:00 p.m. - 2:30 p.m.   | Lectura detallada del enunciado e identificación de Elementos                                                                                                                                                                                                                                                                                                                                                                                              | Se releyó el enunciado identificando los elementos que intervienen: el mapa de intersecciones y caminos con sus longitudes, las posiciones iniciales de Lion-O y de los mutantes, las salidas del puerto y la velocidad de la nave de los mutantes. Quedó la duda de si los mutantes podían alcanzar a Lion-O a mitad de un camino o solo en las intersecciones.                                                                                                                                                                                                                                                                                               |
-| Oct. 29: 9:00 a.m. - 10:00 a.m.  | Análizamos del problema y Bosquejo del los casos de prueba dados                                                                                                                                                                                                                                                                                                                                                                                           | Se analizaron los elementos identificados el día anterior y se aclararon las dudas. Se revisaron los casos de prueba del enunciado y se bosquejó qué entra y qué sale en cada uno.                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| Nov. 3: 9:00 a.m.                | Discusion de ideas                                                                                                                                                                                                                                                                                                                                                                                                                                         | Se discutieron distintas ideas para abordar el problema a partir de los casos de prueba revisados. Se acordó un enfoque general para empezar a escribir la especificación                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| Nov. 4: 9:00 a.m. -  6:00 p.m.   | Discutimos ideas generales sobre el problema.<br><br>Desarollo de la primera parte de la especificacion del problema( Entrada)<br><br>Desarollo del primer <br>Caso de prueba.                                                                                                                                                                                                                                                                             | Se escribió la entrada formal como la tupla (G, w, s, r, K, v), definiendo el dominio de cada elemento. Se armó el primer caso de prueba con un grafo pequeño cuya respuesta se pudiera verificar a mano.                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| Nov. 5: 8:00 a.m. - 12:00 p.m.   | Desarollo completo de la especificacion del problema( Entrada y Salida)<br><br>Ajustes del primer Caso de prueba<br><br>Creacion del repositorio del proyecto<br><br>Desarollo del segundo caso de prueba<br><br>Se empezo a escribir el documento para la primer entrega                                                                                                                                                                                  | Se completó la especificación agregando las salidas esperadas. Se corrigió el primer caso de prueba para que coincidiera con la especificación final y se diseñó el segundo. Se creó el repositorio y se subieron los primeros archivos. Se definió la estructura del documento de la primera entrega y se redactaron las primeras secciones.                                                                                                                                                                                                                                                                                                                  |
-| Nov. 8: 9:00 a.m. - 9:00 pm.p    | Ajustes y correciones de la especificacion del problema.<br><br>Realizamos ajustes y correcciones del segundo Caso de prueba<br><br>Desarollamos del tercer caso de prueba <br><br>Se subio al repositorio todo lo que se habia hecho.<br><br>Continuamos con el desarollo el documento de la primera entrega.<br><br>Avanzamos con la implentacion (entrada de datos) y discutimos sobre que algoritmos usar para la resolucion del proyecto.<br><br><br> | Al revisar la especificación con más calma se encontraron detalles que no estaban bien definidos, sobre todo en algunas restricciones de la entrada, y se corrigieron. Esto obligó a ajustar el segundo caso de prueba, y aprovechando eso se armó un tercer caso pensado para probar situaciones límite. Con la especificación ya más estable, se pasó a la parte práctica: se dejó funcionando la lectura de datos y se empezó a debatir qué algoritmo conviene usar, comparando qué tan fácil es implementarlo contra qué tan eficiente sería. Todavía no hay una decisión final. Al final se subió todo al repositorio para tener respaldo del avance.<br> |
-| Nov 9:<br>10:00 a.m. -11:00 a.m. | Se corrigieron algunos detalles de redaccion el el documento de la primera entrega <br>                                                                                                                                                                                                                                                                                                                                                                    | Se leyó el documento completo para detectar errores de ortografía y frases poco claras. Se reescribieron algunos párrafos para que la notación de la especificación fuera consistente con la usada en los casos de prueba.                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| Nov 10: 9:00 a.m. - 10:00 a.m.   | Se termino de escribir la bitacora<br><br>Se termino de redactar el do cumento de la primera entrega <br>                                                                                                                                                                                                                                                                                                                                                  | Se completó la bitácora con las actividades de cada sesión. Se escribieron las secciones que faltaban del documento y se hizo una revisión final.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+En esta parte presentamos la estrategia de la solución final, la evolución de las ideas y las trazas de los 40 casos unificados.
+
+## Precisiones para leer la solución
+
+Usamos $s$ para el inicio de Lion-O, $r$ para el inicio de Mumm-Ra, $K$ para el conjunto de salidas y $v_M$ para la velocidad máxima de los mutantes. Para cada nodo $x$, $D_M(x)$ representa la distancia mínima desde $r$ hasta $x$, y $L(x)$ representa la distancia acumulada de Lion-O por la ruta que está recorriendo.
+
+En cada nodo, la condición de seguridad exige que Lion-O llegue estrictamente antes que los mutantes:
+
+$$
+\frac{L(x)}{v_L} < \frac{D_M(x)}{v_M}
+\quad\Longleftrightarrow\quad
+L(x) < \frac{v_L D_M(x)}{v_M}.
+$$
+
+Para una velocidad candidata $v_L$, el programa calcula la cota $\frac{v_L D_M(x)}{v_M}$ y solo acepta relajar la distancia hacia $x$ si la distancia acumulada de Lion-O es menor. La desigualdad es estricta porque un empate implica captura.
+
+Aunque la prueba de Dijkstra de Lion-O comprueba las intersecciones, también queda cubierta la seguridad dentro de cada vía. Si una carretera de longitud $w$ conecta los nodos $u$ y $z$, y Lion-O la recorre desde $u$, para un punto situado a distancia $x$ sobre esa carretera las distancias relevantes son $L(u)+x$ para Lion-O y $\min(D_M(u)+x,\,D_M(z)+w-x)$ para Mumm-Ra. Estas expresiones son lineales por tramos. En cada tramo, si Lion-O cumple la cota de seguridad en ambos extremos, también la cumple en el interior. Así justificamos la comprobación por vértices sin asumir que los encuentros solo ocurren en intersecciones.
+
+Si Mumm-Ra no puede llegar a un nodo, usamos $D_M(x)=\infty$; ese nodo no impone una cota finita. Si Lion-O y Mumm-Ra comienzan en el mismo nodo, la captura es inmediata. Si Lion-O ya comienza en una salida distinta de $r$, no recorre ninguna vía: el umbral matemático es cero y la versión final informa $10^{-7}\,\text{km/h}$, dentro del error permitido.
+
+## Estrategia final y flujo del programa
+
+Primero construimos el grafo no dirigido mediante listas de adyacencia, convertimos los nodos a índices desde cero y guardamos las salidas en un conjunto. Si Lion-O empieza en una salida, el programa responde sin ejecutar la búsqueda: informa captura si $s=r$ y, en caso contrario, informa $10^{-7}\,\text{km/h}$.
+
+En los demás casos, BFS busca una salida sin pasar por el nodo inicial de Mumm-Ra. Este paso descarta situaciones sin una ruta estructural admisible; no decide por sí solo si la persecución es segura. Cuando BFS encuentra una salida, Dijkstra calcula una sola vez $D_M(x)$ para todos los nodos.
+
+Para cada velocidad candidata $q$, calculamos la cota $\frac{qD_M(x)}{v_M}$ y ejecutamos Dijkstra desde Lion-O. Solo aceptamos una llegada a un nodo cuando su distancia acumulada es estrictamente menor que esa cota. Si el recorrido alcanza una salida, $q$ es factible.
+
+La factibilidad es monótona respecto a $q$: al aumentar la velocidad, las cotas no disminuyen. La búsqueda empieza con la cota superior $U_0=10^{12}$ y la duplica mientras la prueba no sea factible. Con una cota factible, reducimos el intervalo desde cero hasta que su ancho sea como máximo $\epsilon=10^{-7}$; también detenemos la búsqueda si el punto medio ya no se representa como un valor distinto de los extremos. Al final se informa el resultado con siete decimales. La prueba de factibilidad devuelve si existe una ruta, no conserva un camino testigo; las rutas que incluimos en las trazas sirven para explicar una forma de escape.
+
+Como ejemplo representativo, tomamos el caso U01. Lion-O parte del nodo 1 y puede llegar a la salida 4 por una ruta de longitud acumulada $L=5$. Dijkstra desde el nodo 2, donde comienza Mumm-Ra, da $D_M(4)=40$, y la velocidad de los mutantes es $v_M=150\,\text{km/h}$. Para esta ruta, la razón crítica es
+
+$$
+\frac{v_M L}{D_M(4)}=\frac{150\cdot 5}{40}=18.75\,\text{km/h}.
+$$
+
+Por eso concluimos que el umbral es $18.75\,\text{km/h}$. El programa valida la cota superior y luego realiza 64 pasos de búsqueda binaria. En la traza U01 detallamos las funciones llamadas, las distancias y la salida final `Lion-O can escape at a speed of 18.7500000 km/h!`.
+
+### Diagrama del flujo lógico implementado
+
+```mermaid
+flowchart TD
+    A[Construir el grafo y leer los datos del caso] --> B{¿Lion-O empieza en una salida?}
+    B -- Sí --> C{¿Empieza allí Mumm-Ra también?}
+    C -- Sí --> X[Informar captura]
+    C -- No --> Y[Informar 0.0000001 km/h]
+    B -- No --> D[BFS evitando el inicio enemigo]
+    D --> E{¿Hay una salida alcanzable?}
+    E -- No --> X
+    E -- Sí --> F[Dijkstra desde Mumm-Ra]
+    F --> G[Probar la cota superior 1e12]
+    G --> H{¿La velocidad es factible?}
+    H -- No --> I[Duplicar la cota superior]
+    I --> G
+    H -- Sí --> J[Búsqueda binaria: intervalo mayor que 1e-7 y punto medio representable]
+    J --> K[Formatear la respuesta con siete decimales]
+```
+
+### Funciones y estructuras de la versión final
+
+| Elemento | Función en la solución |
+| --- | --- |
+| `funcion_que_ejecuta_todo_el_programa` | Construye el grafo no dirigido, convierte índices, crea el conjunto de salidas, llama al solucionador y acumula las respuestas. |
+| `funcion_que_indica_si_existe_una_ruta_de_escape_posible` | Recorre el grafo con BFS y evita el inicio de Mumm-Ra; descarta casos sin salida estructural admisible. |
+| `funcion_para_calcular_distancias_minimas` | Ejecuta Dijkstra desde Mumm-Ra y devuelve $D_M(x)$ para cada nodo. |
+| `funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada` | Calcula las cotas de seguridad y ejecuta Dijkstra desde Lion-O para determinar si la velocidad candidata llega a una salida. |
+| `funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar` | Resuelve casos directos, combina BFS y Dijkstra, verifica o amplía la cota superior y aplica la búsqueda binaria. |
+| Lista de adyacencia, `set`, arreglos, `deque` y heap de `heapq` | Almacenan las carreteras y salidas, registran distancias y estados, permiten BFS y extraen el nodo con menor distancia provisional. |
+
+## Cómo evolucionaron las ideas hasta la solución final
+
+1. **Representamos el mapa con un grafo ponderado no dirigido.** Las carreteras quedan en las listas de adyacencia de ambos extremos.
+2. **Separamos conectividad y seguridad.** BFS detecta si hay una salida sin pasar por el nodo inicial enemigo; luego la persecución se analiza con distancias ponderadas.
+3. **Resumimos las opciones de Mumm-Ra con distancias mínimas.** Ejecutamos Dijkstra desde su origen una sola vez por caso.
+4. **Convertimos la seguridad en una prueba para una velocidad fija.** Dijkstra desde Lion-O recorre solo los nodos donde su llegada es estrictamente anterior a la de los mutantes.
+5. **Buscamos el umbral en lugar de enumerar rutas.** Usamos la monotonía de la factibilidad, una cota superior ampliable y búsqueda binaria.
+6. **Resolvimos los casos límite.** Tratamos el inicio compartido, el inicio en una salida y los nodos inalcanzables para Mumm-Ra.
+
+Así cerramos las preguntas que habían quedado abiertas en la primera entrega. La solución final combina el filtro BFS, las distancias de Dijkstra y la búsqueda del umbral de velocidad.
+
+## Cambios durante el desarrollo
+
+Al probar los casos de tipo B observamos diferencias en las últimas cifras de algunas respuestas y un estado de «No recibido» en la arena. Revisamos el requisito de error absoluto y comparamos las salidas de referencia para entender el comportamiento numérico.
+
+Durante la evolución del código revisamos la cota inicial de la búsqueda, el criterio de parada, la salida con siete decimales y el caso en que Lion-O comienza en una salida distinta de Mumm-Ra. También verificamos que la ampliación de la cota continuara disponible si una prueba inicial no era factible y añadimos una condición para detener la búsqueda cuando el punto medio ya no se representa como un valor diferente de los extremos.
+
+A través de las funciones de Dijkstra, de prueba de factibilidad y del solucionador general, iteramos hasta consolidar la lógica que describimos en este informe: BFS para la conectividad admisible, distancias mínimas desde Mumm-Ra, Dijkstra restringido para cada velocidad candidata, búsqueda de una cota superior factible y búsqueda binaria. Después subimos la versión final y el equipo observó su aceptación en la arena.
+
+## Trazas de los casos unificados
+
+Seguimos el orden de los 40 casos unificados. Las respuestas de referencia están escritas con seis decimales, mientras que el código final imprime siete. Por eso mostramos la salida exacta que produce la implementación final en cada traza. Al comparar las respuestas, las frases coincidieron en todos los casos y el mayor error numérico fue menor que `3 × 10⁻⁷`, por debajo de `10⁻⁶`. En cada caso presentamos las llamadas, las distancias relevantes, la ruta testigo cuando aplica y las decisiones del código.
+
+Ignoramos las líneas en blanco que separaban algunos casos durante la comparación local. Las imágenes de los 40 grafos están enlazadas en las trazas.
+
+### Referencia de llamadas usada en cada traza
+
+- **MAIN** = `funcion_que_ejecuta_todo_el_programa`.
+- **SOLVE** = `funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar`.
+- **BFS** = `funcion_que_indica_si_existe_una_ruta_de_escape_posible`.
+- **DIJKSTRA** = `funcion_para_calcular_distancias_minimas`.
+- **PRUEBA(q)** = `funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada`, invocada para la velocidad `q`.
+
+### Caso U01
+
+**Entrada:** `n=5`, `m=5`, `k=2`, `v_M=150`, Lion-O `s=1`, Mumm-Ra `r=2`, salidas `K=[4, 5]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 2) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[45, 0, 46, 40, 30]`.
+
+**Ruta testigo ilustrativa:** `1 → 4`.
+
+**Longitudes de los tramos:** `1→4: 5`. Suma recorrida hasta la salida: `L=5`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 45 | 0.000000 |
+| 4 | 5 | 40 | 18.750000 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `18.750000 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 18.7500000 km/h!`
+
+**Imagen del grafo:**
+
+![Grafo Pruebas 1](Grafos1.png)
+
+
+### Caso U02
+
+**Entrada:** `n=3`, `m=2`, `k=1`, `v_M=160`, Lion-O `s=3`, Mumm-Ra `r=2`, salidas `K=[1]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 2](Grafos2.png)
+
+
+### Caso U03
+
+**Entrada:** `n=4`, `m=3`, `k=1`, `v_M=120`, Lion-O `s=1`, Mumm-Ra `r=2`, salidas `K=[4]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 2) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[24, 0, 20, 18]`.
+
+**Ruta testigo ilustrativa:** `1 → 3 → 4`.
+
+**Longitudes de los tramos:** `1→3: 4; 3→4: 2`. Suma recorrida hasta la salida: `L=6`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 24 | 0.000000 |
+| 3 | 4 | 20 | 24.000000 |
+| 4 | 6 | 18 | 40.000000 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `40.000000 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 40.0000000 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 3](Grafos3.png)
+
+
+### Caso U04
+
+**Entrada:** `n=8`, `m=13`, `k=2`, `v_M=100`, Lion-O `s=1`, Mumm-Ra `r=3`, salidas `K=[7, 8]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 3) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[5, 1, 0, 7, 12, 12, 11, 5]`.
+
+**Ruta testigo ilustrativa:** `1 → 4 → 5 → 6 → 7`.
+
+**Longitudes de los tramos:** `1→4: 5; 4→5: 5; 5→6: 5; 6→7: 5`. Suma recorrida hasta la salida: `L=20`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 5 | 0.000000 |
+| 4 | 5 | 7 | 71.428571 |
+| 5 | 10 | 12 | 83.333333 |
+| 6 | 15 | 12 | 125.000000 |
+| 7 | 20 | 11 | 181.818182 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `181.818182 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 181.8181818 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 4](Grafos4.png)
+
+
+### Caso U05
+
+**Entrada:** `n=9`, `m=14`, `k=3`, `v_M=200`, Lion-O `s=5`, Mumm-Ra `r=5`, salidas `K=[1, 5, 9]`.
+
+**Decisión que observamos:** Identificamos que Lion-O y Mumm-Ra empiezan en el mismo nodo y que ese nodo es una salida. SOLVE entra por la rama de salida, comprueba `s != r`, no asignamos velocidad y el resultado es captura.
+
+**Llamadas:** `MAIN → SOLVE (rama de salida; misma posición)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** Determinamos que no hay una salida segura que Lion-O pueda alcanzar desde el punto ocupado por Mumm-Ra; la captura es inmediata.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 5](Grafos5.png)
+
+
+### Caso U06
+
+**Entrada:** `n=10`, `m=16`, `k=2`, `v_M=800`, Lion-O `s=1`, Mumm-Ra `r=9`, salidas `K=[10, 8]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 9) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[110, 86, 41, 30, 51, 70, 51, 1, 0, 1]`.
+
+**Ruta testigo ilustrativa:** `1 → 2 → 7 → 8`.
+
+**Longitudes de los tramos:** `1→2: 45; 2→7: 35; 7→8: 50`. Suma recorrida hasta la salida: `L=130`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 110 | 0.000000 |
+| 2 | 45 | 86 | 418.604651 |
+| 7 | 80 | 51 | 1254.901961 |
+| 8 | 130 | 1 | 104000.000000 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `104000.000000 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 104000.0000000 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 6](Grafos6.png)
+
+
+### Caso U07
+
+**Entrada:** `n=11`, `m=15`, `k=2`, `v_M=120`, Lion-O `s=1`, Mumm-Ra `r=7`, salidas `K=[6, 11]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 7) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[∞, ∞, ∞, ∞, ∞, ∞, 0, 4, 7, 8, 4]`.
+
+**Ruta testigo ilustrativa:** `1 → 6`.
+
+**Longitudes de los tramos:** `1→6: 5`. Suma recorrida hasta la salida: `L=5`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | ∞ | 0 (D=∞) |
+| 6 | 5 | ∞ | 0 (D=∞) |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `0` como ínfimo porque Mumm-Ra no alcanza estos nodos. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 7](Grafos7.png)
+
+
+### Caso U08
+
+**Entrada:** `n=12`, `m=17`, `k=3`, `v_M=150`, Lion-O `s=1`, Mumm-Ra `r=6`, salidas `K=[8, 10, 12]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 8](Grafos8.png)
+
+
+### Caso U09
+
+**Entrada:** `n=14`, `m=24`, `k=2`, `v_M=120`, Lion-O `s=1`, Mumm-Ra `r=4`, salidas `K=[7, 14]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 4) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[17, 15, 7, 0, 9, 10, 2, 17, 21, 16, 12, 17, 16, 11]`.
+
+**Ruta testigo ilustrativa:** `1 → 8 → 14`.
+
+**Longitudes de los tramos:** `1→8: 7; 8→14: 6`. Suma recorrida hasta la salida: `L=13`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 17 | 0.000000 |
+| 8 | 7 | 17 | 49.411765 |
+| 14 | 13 | 11 | 141.818182 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `141.818182 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 141.8181818 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 9](Grafos9.png)
+
+
+### Caso U10
+
+**Entrada:** `n=15`, `m=25`, `k=3`, `v_M=180`, Lion-O `s=1`, Mumm-Ra `r=8`, salidas `K=[13, 14, 15]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 8) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[19, 25, 19, 21, 16, 10, 12, 0, 2, 5, 7, 11, 9, 16, 14]`.
+
+**Ruta testigo ilustrativa:** `1 → 7 → 9 → 11 → 13`.
+
+**Longitudes de los tramos:** `1→7: 7; 7→9: 10; 9→11: 5; 11→13: 6`. Suma recorrida hasta la salida: `L=28`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 19 | 0.000000 |
+| 7 | 7 | 12 | 105.000000 |
+| 9 | 17 | 2 | 1530.000000 |
+| 11 | 22 | 7 | 565.714286 |
+| 13 | 28 | 9 | 560.000000 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `1530.000000 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 1530.0000000 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 10](Grafos10.png)
+
+
+### Caso U11
+
+**Entrada:** `n=16`, `m=28`, `k=2`, `v_M=950`, Lion-O `s=1`, Mumm-Ra `r=15`, salidas `K=[16, 12]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 15) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[315, 285, 255, 167, 285, 205, 175, 87, 255, 175, 90, 2, 165, 85, 0, 1]`.
+
+**Ruta testigo ilustrativa:** `1 → 6 → 11 → 12`.
+
+**Longitudes de los tramos:** `1→6: 110; 6→11: 115; 11→12: 90`. Suma recorrida hasta la salida: `L=315`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 315 | 0.000000 |
+| 6 | 110 | 205 | 509.756098 |
+| 11 | 225 | 90 | 2375.000000 |
+| 12 | 315 | 2 | 149625.000000 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `149625.000000 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 149625.0000000 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 11](Grafos11.png)
+
+
+### Caso U12
+
+**Entrada:** `n=16`, `m=27`, `k=3`, `v_M=140`, Lion-O `s=8`, Mumm-Ra `r=8`, salidas `K=[1, 8, 16]`.
+
+**Decisión que observamos:** Identificamos que Lion-O y Mumm-Ra empiezan en el mismo nodo y que ese nodo es una salida. SOLVE entra por la rama de salida, comprueba `s != r`, no asignamos velocidad y el resultado es captura.
+
+**Llamadas:** `MAIN → SOLVE (rama de salida; misma posición)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** Determinamos que no hay una salida segura que Lion-O pueda alcanzar desde el punto ocupado por Mumm-Ra; la captura es inmediata.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 12](Grafos12.png)
+
+
+### Caso U13
+
+**Entrada:** `n=18`, `m=28`, `k=3`, `v_M=250`, Lion-O `s=1`, Mumm-Ra `r=12`, salidas `K=[9, 10, 18]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 12) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, 4, 0, 4, 8, 11, 7, 11, 9]`.
+
+**Ruta testigo ilustrativa:** `1 → 10`.
+
+**Longitudes de los tramos:** `1→10: 7`. Suma recorrida hasta la salida: `L=7`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | ∞ | 0 (D=∞) |
+| 10 | 7 | ∞ | 0 (D=∞) |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `0` como ínfimo porque Mumm-Ra no alcanza estos nodos. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 13](Grafos13.png)
+
+
+### Caso U14
+
+**Entrada:** `n=18`, `m=27`, `k=4`, `v_M=110`, Lion-O `s=1`, Mumm-Ra `r=9`, salidas `K=[12, 14, 16, 18]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 14](Grafos14.png)
+
+
+### Caso U15
+
+**Entrada:** `n=20`, `m=34`, `k=4`, `v_M=160`, Lion-O `s=1`, Mumm-Ra `r=14`, salidas `K=[5, 15, 19, 20]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 14) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[23, 20, 17, 11, 16, 20, 14, 11, 5, 10, 17, 11, 5, 0, 5, 23, 17, 11, 5, 10]`.
+
+**Ruta testigo ilustrativa:** `1 → 2 → 3 → 4 → 5`.
+
+**Longitudes de los tramos:** `1→2: 6; 2→3: 6; 3→4: 6; 4→5: 6`. Suma recorrida hasta la salida: `L=24`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 23 | 0.000000 |
+| 2 | 6 | 20 | 48.000000 |
+| 3 | 12 | 17 | 112.941176 |
+| 4 | 18 | 11 | 261.818182 |
+| 5 | 24 | 16 | 240.000000 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `261.818182 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 261.8181818 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 15](Grafos15.png)
+
+
+### Caso U16
+
+**Entrada:** `n=20`, `m=35`, `k=3`, `v_M=300`, Lion-O `s=3`, Mumm-Ra `r=18`, salidas `K=[3, 10, 20]`.
+
+**Decisión que observamos:** Vemos que Lion-O ya está en una salida distinta del nodo de Mumm-Ra; por eso SOLVE devuelve $10^{-7}$ sin BFS, Dijkstra ni búsqueda binaria.
+
+**Llamadas:** `MAIN → SOLVE (retorno directo $10^{-7}$)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Cálculo inmediato:** Lion-O ya está en la salida del nodo `3`, así que la distancia pendiente es `L=0`. Como $s\ne r$, no hay captura al inicio y no se recorre ninguna arista; el solucionador informa velocidad `0.0000001 km/h`. No se necesita calcular una razón crítica ni ejecutar Dijkstra.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 16](Grafos16.png)
+
+
+### Caso U17
+
+**Entrada:** `n=25`, `m=44`, `k=2`, `v_M=130`, Lion-O `s=1`, Mumm-Ra `r=13`, salidas `K=[25, 21]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 13) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[23, 16, 11, 16, 23, 16, 9, 4, 9, 16, 11, 4, 0, 4, 11, 16, 9, 4, 9, 16, 23, 16, 11, 16, 23]`.
+
+**Ruta testigo ilustrativa:** `1 → 21`.
+
+**Longitudes de los tramos:** `1→21: 22`. Suma recorrida hasta la salida: `L=22`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 23 | 0.000000 |
+| 21 | 22 | 23 | 124.347826 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `124.347826 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 124.3478261 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 17](Grafos17.png)
+
+
+### Caso U18
+
+**Entrada:** `n=28`, `m=47`, `k=3`, `v_M=220`, Lion-O `s=1`, Mumm-Ra `r=15`, salidas `K=[26, 27, 28]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 18](Grafos18.png)
+
+
+### Caso U19
+
+**Entrada:** `n=30`, `m=53`, `k=2`, `v_M=1200`, Lion-O `s=1`, Mumm-Ra `r=29`, salidas `K=[30, 25]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 29) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[555, 520, 485, 450, 451, 520, 430, 395, 360, 361, 485, 395, 305, 270, 271, 450, 360, 270, 180, 181, 360, 270, 180, 90, 91, 270, 180, 90, 0, 1]`.
+
+**Ruta testigo ilustrativa:** `1 → 7 → 13 → 19 → 24 → 25`.
+
+**Longitudes de los tramos:** `1→7: 125; 7→13: 125; 13→19: 125; 19→24: 90; 24→25: 1`. Suma recorrida hasta la salida: `L=466`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 555 | 0.000000 |
+| 7 | 125 | 430 | 348.837209 |
+| 13 | 250 | 305 | 983.606557 |
+| 19 | 375 | 180 | 2500.000000 |
+| 24 | 465 | 90 | 6200.000000 |
+| 25 | 466 | 91 | 6145.054945 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `6200.000000 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 6200.0000000 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 19](Grafos19.png)
+
+
+### Caso U20
+
+**Entrada:** `n=35`, `m=62`, `k=4`, `v_M=150`, Lion-O `s=18`, Mumm-Ra `r=18`, salidas `K=[1, 7, 29, 35]`.
+
+**Decisión que observamos:** Identificamos que ambos empiezan en el mismo nodo, que no es salida. SOLVE llama a BFS; BFS detecta `s == r` y devuelve falso sin iniciar la cola.
+
+**Llamadas:** `MAIN → SOLVE → BFS (falso por inicios iguales)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** Determinamos que no hay una salida segura que Lion-O pueda alcanzar desde el punto ocupado por Mumm-Ra; la captura es inmediata.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 20](Grafos20.png)
+
+
+### Caso U21
+
+**Entrada:** `n=36`, `m=60`, `k=4`, `v_M=190`, Lion-O `s=1`, Mumm-Ra `r=15`, salidas `K=[12, 24, 30, 36]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 15) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, 10, 5, 0, 5, 15, 10, 5, 10, 20, 15, 10, 15, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞]`.
+
+**Ruta testigo ilustrativa:** `1 → 6 → 11 → 12`.
+
+**Longitudes de los tramos:** `1→6: 7; 6→11: 7; 11→12: 5`. Suma recorrida hasta la salida: `L=19`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | ∞ | 0 (D=∞) |
+| 6 | 7 | ∞ | 0 (D=∞) |
+| 11 | 14 | ∞ | 0 (D=∞) |
+| 12 | 19 | ∞ | 0 (D=∞) |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `0` como ínfimo porque Mumm-Ra no alcanza estos nodos. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 21](Grafos21.png)
+
+
+### Caso U22
+
+**Entrada:** `n=40`, `m=68`, `k=4`, `v_M=175`, Lion-O `s=1`, Mumm-Ra `r=20`, salidas `K=[25, 30, 35, 40]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 22](Grafos22.png)
+
+
+### Caso U23
+
+**Entrada:** `n=48`, `m=86`, `k=5`, `v_M=140`, Lion-O `s=1`, Mumm-Ra `r=28`, salidas `K=[8, 24, 40, 45, 48]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 28) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[38, 31, 24, 17, 22, 29, 36, 43, 31, 24, 17, 10, 15, 22, 29, 36, 25, 18, 11, 5, 10, 16, 23, 30, 18, 11, 5, 0, 5, 11, 18, 25, 23, 16, 10, 5, 10, 16, 23, 30, 30, 23, 17, 12, 17, 23, 30, 37]`.
+
+**Ruta testigo ilustrativa:** `1 → 8`.
+
+**Longitudes de los tramos:** `1→8: 40`. Suma recorrida hasta la salida: `L=40`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 38 | 0.000000 |
+| 8 | 40 | 43 | 130.232558 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `130.232558 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 130.2325582 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 23](Grafos23.png)
+
+
+### Caso U24
+
+**Entrada:** `n=50`, `m=90`, `k=4`, `v_M=250`, Lion-O `s=10`, Mumm-Ra `r=41`, salidas `K=[10, 20, 30, 50]`.
+
+**Decisión que observamos:** Vemos que Lion-O ya está en una salida distinta del nodo de Mumm-Ra; por eso SOLVE devuelve $10^{-7}$ sin BFS, Dijkstra ni búsqueda binaria.
+
+**Llamadas:** `MAIN → SOLVE (retorno directo $10^{-7}$)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Cálculo inmediato:** Lion-O ya está en la salida del nodo `10`, así que la distancia pendiente es `L=0`. Como $s\ne r$, no hay captura al inicio y no se recorre ninguna arista; el solucionador informa velocidad `0.0000001 km/h`. No se necesita calcular una razón crítica ni ejecutar Dijkstra.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 24](Grafos24.png)
+
+
+### Caso U25
+
+**Entrada:** `n=60`, `m=97`, `k=4`, `v_M=60`, Lion-O `s=1`, Mumm-Ra `r=20`, salidas `K=[27, 38, 42, 52]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 20) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[32, 29, 23, 31, 39, 38, 28, 25, 20, 12, 20, 26, 19, 29, 22, 6, 14, 15, 8, 0, 7, 12, 16, 14, 10, 6, 12, 16, 37, 42, 47, 51, 57, 60, 58, 65, 65, 58, 66, 75, 72, 69, 36, 30, 36, 26, 18, 28, 37, 40, 30, 40, 43, 48, 54, 64, 68, 31, 39, 45]`.
+
+**Ruta testigo ilustrativa:** `1 → 11 → 44 → 48 → 52`.
+
+**Longitudes de los tramos:** `1→11: 12; 11→44: 10; 44→48: 15; 48→52: 15`. Suma recorrida hasta la salida: `L=52`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 32 | 0.000000 |
+| 11 | 12 | 20 | 36.000000 |
+| 44 | 22 | 30 | 44.000000 |
+| 48 | 37 | 28 | 79.285714 |
+| 52 | 52 | 40 | 78.000000 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `79.285714 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 79.2857143 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 25](Grafos25.png)
+
+
+### Caso U26
+
+**Entrada:** `n=61`, `m=108`, `k=4`, `v_M=200`, Lion-O `s=1`, Mumm-Ra `r=31`, salidas `K=[55, 58, 60, 61]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 26](Grafos26.png)
+
+
+### Caso U27
+
+**Entrada:** `n=70`, `m=128`, `k=3`, `v_M=1500`, Lion-O `s=1`, Mumm-Ra `r=69`, salidas `K=[70, 60, 50]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 69) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[1001, 961, 921, 881, 841, 801, 701, 601, 501, 502, 961, 861, 821, 781, 741, 701, 601, 501, 401, 402, 921, 821, 721, 681, 641, 601, 501, 401, 301, 302, 881, 781, 681, 581, 541, 501, 401, 301, 201, 202, 841, 741, 641, 541, 441, 401, 301, 201, 101, 102, 801, 701, 601, 501, 401, 301, 201, 101, 1, 2, 800, 700, 600, 500, 400, 300, 200, 100, 0, 1]`.
+
+**Ruta testigo ilustrativa:** `1 → 12 → 23 → 34 → 45 → 46 → 47 → 48 → 49 → 50`.
+
+**Longitudes de los tramos:** `1→12: 140; 12→23: 140; 23→34: 140; 34→45: 140; 45→46: 100; 46→47: 100; 47→48: 100; 48→49: 100; 49→50: 100`. Suma recorrida hasta la salida: `L=1060`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 1001 | 0.000000 |
+| 12 | 140 | 861 | 243.902439 |
+| 23 | 280 | 721 | 582.524272 |
+| 34 | 420 | 581 | 1084.337349 |
+| 45 | 560 | 441 | 1904.761905 |
+| 46 | 660 | 401 | 2468.827930 |
+| 47 | 760 | 301 | 3787.375415 |
+| 48 | 860 | 201 | 6417.910448 |
+| 49 | 960 | 101 | 14257.425743 |
+| 50 | 1060 | 102 | 15588.235294 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `15588.235294 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 15588.2352942 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 27](Grafos27.png)
+
+
+### Caso U28
+
+**Entrada:** `n=80`, `m=148`, `k=5`, `v_M=180`, Lion-O `s=45`, Mumm-Ra `r=45`, salidas `K=[1, 10, 45, 71, 80]`.
+
+**Decisión que observamos:** Identificamos que Lion-O y Mumm-Ra empiezan en el mismo nodo y que ese nodo es una salida. SOLVE entra por la rama de salida, comprueba `s != r`, no asignamos velocidad y el resultado es captura.
+
+**Llamadas:** `MAIN → SOLVE (rama de salida; misma posición)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** Determinamos que no hay una salida segura que Lion-O pueda alcanzar desde el punto ocupado por Mumm-Ra; la captura es inmediata.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 28](Grafos30.png)
+
+
+### Caso U29
+
+**Entrada:** `n=84`, `m=147`, `k=5`, `v_M=210`, Lion-O `s=1`, Mumm-Ra `r=35`, salidas `K=[28, 50, 56, 75, 84]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 35) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, 36, 30, 24, 18, 12, 6, 0, 38, 32, 26, 20, 14, 8, 6, 44, 38, 32, 26, 20, 14, 12, 50, 44, 38, 32, 26, 20, 18, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞]`.
+
+**Ruta testigo ilustrativa:** `1 → 9 → 17 → 25 → 26 → 27 → 28`.
+
+**Longitudes de los tramos:** `1→9: 8; 9→17: 8; 17→25: 8; 25→26: 6; 26→27: 6; 27→28: 6`. Suma recorrida hasta la salida: `L=42`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | ∞ | 0 (D=∞) |
+| 9 | 8 | ∞ | 0 (D=∞) |
+| 17 | 16 | ∞ | 0 (D=∞) |
+| 25 | 24 | ∞ | 0 (D=∞) |
+| 26 | 30 | ∞ | 0 (D=∞) |
+| 27 | 36 | ∞ | 0 (D=∞) |
+| 28 | 42 | ∞ | 0 (D=∞) |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `0` como ínfimo porque Mumm-Ra no alcanza estos nodos. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 29](Grafos31.png)
+
+
+### Caso U30
+
+**Entrada:** `n=90`, `m=159`, `k=6`, `v_M=165`, Lion-O `s=1`, Mumm-Ra `r=30`, salidas `K=[35, 45, 60, 70, 80, 90]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 30](Grafos32.png)
+
+
+### Caso U31
+
+**Entrada:** `n=96`, `m=178`, `k=6`, `v_M=145`, Lion-O `s=1`, Mumm-Ra `r=54`, salidas `K=[12, 48, 60, 84, 90, 96]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 54) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[47, 39, 44, 36, 29, 23, 29, 36, 44, 52, 60, 68, 52, 44, 36, 28, 21, 15, 21, 28, 36, 44, 52, 60, 44, 36, 28, 21, 14, 9, 14, 21, 28, 36, 44, 52, 38, 30, 22, 15, 9, 4, 9, 15, 22, 30, 38, 46, 32, 24, 16, 9, 4, 0, 4, 9, 16, 24, 32, 40, 38, 30, 22, 15, 9, 4, 9, 15, 22, 30, 38, 46, 46, 38, 30, 22, 16, 10, 16, 22, 30, 38, 46, 54, 54, 46, 38, 30, 24, 18, 24, 30, 38, 46, 41, 49]`.
+
+**Ruta testigo ilustrativa:** `1 → 12`.
+
+**Longitudes de los tramos:** `1→12: 65`. Suma recorrida hasta la salida: `L=65`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 47 | 0.000000 |
+| 12 | 65 | 68 | 138.602941 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `138.602941 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 138.6029412 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 31](Grafos33.png)
+
+
+### Caso U32
+
+**Entrada:** `n=100`, `m=188`, `k=5`, `v_M=300`, Lion-O `s=50`, Mumm-Ra `r=51`, salidas `K=[1, 10, 50, 91, 100]`.
+
+**Decisión que observamos:** Vemos que Lion-O ya está en una salida distinta del nodo de Mumm-Ra; por eso SOLVE devuelve $10^{-7}$ sin BFS, Dijkstra ni búsqueda binaria.
+
+**Llamadas:** `MAIN → SOLVE (retorno directo $10^{-7}$)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Cálculo inmediato:** Lion-O ya está en la salida del nodo `50`, así que la distancia pendiente es `L=0`. Como $s\ne r$, no hay captura al inicio y no se recorre ninguna arista; el solucionador informa velocidad `0.0000001 km/h`. No se necesita calcular una razón crítica ni ejecutar Dijkstra.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 32](Grafos34.png)
+
+
+### Caso U33
+
+**Entrada:** `n=105`, `m=194`, `k=4`, `v_M=135`, Lion-O `s=1`, Mumm-Ra `r=53`, salidas `K=[15, 90, 100, 105]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 53) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[60, 52, 49, 41, 33, 26, 20, 15, 20, 26, 33, 41, 49, 57, 65, 57, 49, 41, 33, 25, 18, 12, 7, 12, 18, 25, 33, 41, 49, 57, 49, 41, 33, 25, 18, 12, 7, 3, 7, 12, 18, 25, 33, 41, 49, 43, 35, 27, 19, 12, 7, 3, 0, 3, 7, 12, 19, 27, 35, 43, 49, 41, 33, 25, 18, 12, 7, 3, 7, 12, 18, 25, 33, 41, 49, 57, 49, 41, 33, 25, 18, 12, 7, 12, 18, 25, 33, 41, 49, 57, 65, 57, 49, 41, 33, 26, 20, 15, 20, 26, 33, 41, 49, 57, 65]`.
+
+**Ruta testigo ilustrativa:** `1 → 15`.
+
+**Longitudes de los tramos:** `1→15: 80`. Suma recorrida hasta la salida: `L=80`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 60 | 0.000000 |
+| 15 | 80 | 65 | 166.153846 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `166.153846 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 166.1538462 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 33](Grafos35.png)
+
+
+### Caso U34
+
+**Entrada:** `n=113`, `m=204`, `k=5`, `v_M=240`, Lion-O `s=1`, Mumm-Ra `r=57`, salidas `K=[100, 105, 110, 112, 113]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 34](Grafos36.png)
+
+
+### Caso U35
+
+**Entrada:** `n=120`, `m=225`, `k=3`, `v_M=2000`, Lion-O `s=1`, Mumm-Ra `r=119`, salidas `K=[120, 105, 90]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 119) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[1502, 1462, 1422, 1382, 1342, 1302, 1202, 1102, 1002, 902, 802, 702, 602, 502, 540, 1462, 1362, 1322, 1282, 1242, 1202, 1102, 1002, 902, 802, 702, 602, 502, 402, 440, 1422, 1322, 1222, 1182, 1142, 1102, 1002, 902, 802, 702, 602, 502, 402, 302, 340, 1382, 1282, 1182, 1082, 1042, 1002, 902, 802, 702, 602, 502, 402, 302, 202, 240, 1342, 1242, 1142, 1042, 942, 902, 802, 702, 602, 502, 402, 302, 202, 102, 140, 1302, 1202, 1102, 1002, 902, 802, 702, 602, 502, 402, 302, 202, 102, 2, 102, 1301, 1201, 1101, 1001, 901, 801, 701, 601, 501, 401, 301, 201, 101, 1, 2, 1300, 1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100, 0, 1]`.
+
+**Ruta testigo ilustrativa:** `1 → 17 → 33 → 49 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 90`.
+
+**Longitudes de los tramos:** `1→17: 140; 17→33: 140; 33→49: 140; 49→65: 140; 65→66: 100; 66→67: 100; 67→68: 100; 68→69: 100; 69→70: 100; 70→71: 100; 71→72: 100; 72→73: 100; 73→74: 100; 74→75: 100; 75→90: 100`. Suma recorrida hasta la salida: `L=1660`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 1502 | 0.000000 |
+| 17 | 140 | 1362 | 205.580029 |
+| 33 | 280 | 1222 | 458.265139 |
+| 49 | 420 | 1082 | 776.340111 |
+| 65 | 560 | 942 | 1188.959660 |
+| 66 | 660 | 902 | 1463.414634 |
+| 67 | 760 | 802 | 1895.261845 |
+| 68 | 860 | 702 | 2450.142450 |
+| 69 | 960 | 602 | 3189.368771 |
+| 70 | 1060 | 502 | 4223.107570 |
+| 71 | 1160 | 402 | 5771.144279 |
+| 72 | 1260 | 302 | 8344.370861 |
+| 73 | 1360 | 202 | 13465.346535 |
+| 74 | 1460 | 102 | 28627.450980 |
+| 75 | 1560 | 140 | 22285.714286 |
+| 90 | 1660 | 102 | 32549.019608 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `32549.019608 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 32549.0196079 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 35](Grafos37.png)
+
+
+### Caso U36
+
+**Entrada:** `n=125`, `m=226`, `k=6`, `v_M=175`, Lion-O `s=63`, Mumm-Ra `r=63`, salidas `K=[1, 25, 63, 101, 120, 125]`.
+
+**Decisión que observamos:** Identificamos que Lion-O y Mumm-Ra empiezan en el mismo nodo y que ese nodo es una salida. SOLVE entra por la rama de salida, comprueba `s != r`, no asignamos velocidad y el resultado es captura.
+
+**Llamadas:** `MAIN → SOLVE (rama de salida; misma posición)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** Determinamos que no hay una salida segura que Lion-O pueda alcanzar desde el punto ocupado por Mumm-Ra; la captura es inmediata.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 36](Grafos38.png)
+
+
+### Caso U37
+
+**Entrada:** `n=132`, `m=234`, `k=6`, `v_M=220`, Lion-O `s=1`, Mumm-Ra `r=66`, salidas `K=[44, 70, 88, 100, 120, 132]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 66) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, 62, 56, 50, 44, 38, 32, 30, 24, 18, 12, 6, 60, 54, 48, 42, 36, 30, 24, 18, 12, 6, 0, 66, 60, 54, 48, 42, 36, 30, 24, 18, 12, 6, 72, 66, 60, 54, 48, 42, 36, 30, 24, 18, 12, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞]`.
+
+**Ruta testigo ilustrativa:** `1 → 13 → 25 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44`.
+
+**Longitudes de los tramos:** `1→13: 8; 13→25: 8; 25→37: 8; 37→38: 6; 38→39: 6; 39→40: 6; 40→41: 6; 41→42: 6; 42→43: 6; 43→44: 6`. Suma recorrida hasta la salida: `L=66`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | ∞ | 0 (D=∞) |
+| 13 | 8 | ∞ | 0 (D=∞) |
+| 25 | 16 | ∞ | 0 (D=∞) |
+| 37 | 24 | ∞ | 0 (D=∞) |
+| 38 | 30 | ∞ | 0 (D=∞) |
+| 39 | 36 | ∞ | 0 (D=∞) |
+| 40 | 42 | ∞ | 0 (D=∞) |
+| 41 | 48 | ∞ | 0 (D=∞) |
+| 42 | 54 | ∞ | 0 (D=∞) |
+| 43 | 60 | ∞ | 0 (D=∞) |
+| 44 | 66 | ∞ | 0 (D=∞) |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `0` como ínfimo porque Mumm-Ra no alcanza estos nodos. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 37](Grafos39.png)
+
+
+### Caso U38
+
+**Entrada:** `n=138`, `m=246`, `k=6`, `v_M=195`, Lion-O `s=1`, Mumm-Ra `r=48`, salidas `K=[60, 80, 96, 110, 125, 138]`.
+
+**Decisión que observamos:** Observamos que BFS no encuentra una salida alcanzable sin entrar al nodo inicial enemigo; por eso concluimos que hay captura y omitimos el cálculo de distancias y las pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sin salida estructural)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Ruta testigo:** No encontramos una ruta admisible; BFS descarta el caso antes del análisis de velocidades.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Mumm-Ra captures Lion-O!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 38](Grafos40.png)
+
+
+### Caso U39
+
+**Entrada:** `n=140`, `m=262`, `k=6`, `v_M=160`, Lion-O `s=1`, Mumm-Ra `r=77`, salidas `K=[14, 56, 98, 127, 135, 140]`.
+
+**Decisión que observamos:** Observamos que BFS encuentra salida estructural; calculamos D_M con Dijkstra y buscamos la menor cota factible mediante pruebas de velocidad.
+
+**Llamadas:** `MAIN → SOLVE → BFS (sí) → DIJKSTRA (desde nodo 77) → PRUEBA(q) para la cota y la búsqueda binaria`.
+
+**Vector completo $D_M(1,\ldots,n)$:** `[62, 54, 58, 50, 42, 34, 29, 32, 38, 46, 54, 62, 70, 78, 66, 58, 50, 42, 34, 26, 21, 24, 30, 38, 46, 54, 62, 70, 58, 50, 42, 34, 26, 19, 14, 17, 23, 30, 38, 46, 54, 62, 50, 42, 34, 26, 19, 13, 8, 11, 17, 24, 32, 40, 48, 56, 44, 36, 28, 20, 13, 8, 4, 7, 12, 19, 27, 35, 43, 51, 39, 31, 23, 15, 8, 3, 0, 3, 8, 15, 23, 31, 39, 47, 45, 37, 29, 21, 14, 8, 5, 8, 13, 20, 28, 36, 44, 52, 53, 45, 37, 29, 21, 14, 11, 14, 19, 26, 34, 42, 50, 58, 61, 53, 45, 37, 29, 21, 18, 21, 26, 34, 42, 50, 58, 66, 69, 61, 53, 45, 37, 29, 26, 29, 34, 42, 50, 58, 57, 65]`.
+
+**Ruta testigo ilustrativa:** `1 → 127`.
+
+**Longitudes de los tramos:** `1→127: 60`. Suma recorrida hasta la salida: `L=60`.
+
+| Nodo visitado | $L(x)$ acumulada | $D_M(x)$ | $v_M \cdot L(x)/D_M(x)$ (km/h) |
+| ---: | ---: | ---: | ---: |
+| 1 | 0 | 62 | 0.000000 |
+| 127 | 60 | 69 | 139.130435 |
+
+**Lectura de la decisión:** al comparar las razones, concluimos que la mayor es `139.130435 km/h`. Verificamos que la ruta pasa las comprobaciones para una velocidad apenas superior a ese umbral; nuestro código conserva la cota superior al terminar la búsqueda.
+
+**Búsqueda numérica:** cota superior inicial $U_0=10^{12}$; la primera prueba fue factible, así que no duplicamos la cota ($d=0$). Reducimos el intervalo con $B=64$ iteraciones binarias hasta que su ancho fue como máximo $10^{-7}$. En total hicimos `65` pruebas de velocidad: una para validar la cota y 64 en la búsqueda binaria.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 139.1304348 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 39](Grafos41.png)
+
+
+### Caso U40
+
+**Entrada:** `n=150`, `m=285`, `k=6`, `v_M=350`, Lion-O `s=75`, Mumm-Ra `r=76`, salidas `K=[1, 15, 75, 136, 145, 150]`.
+
+**Decisión que observamos:** Vemos que Lion-O ya está en una salida distinta del nodo de Mumm-Ra; por eso SOLVE devuelve $10^{-7}$ sin BFS, Dijkstra ni búsqueda binaria.
+
+**Llamadas:** `MAIN → SOLVE (retorno directo $10^{-7}$)`.
+
+**Vector de Dijkstra:** No se calcula porque el flujo termina antes de llamar a DIJKSTRA.
+
+**Cálculo inmediato:** Lion-O ya está en la salida del nodo `75`, así que la distancia pendiente es `L=0`. Como $s\ne r$, no hay captura al inicio y no se recorre ninguna arista; el solucionador informa velocidad `0.0000001 km/h`. No se necesita calcular una razón crítica ni ejecutar Dijkstra.
+
+**Búsqueda numérica:** no se ejecuta en esta rama.
+
+**Salida del programa final:** `Lion-O can escape at a speed of 0.0000001 km/h!`
+
+**Imagen del Grafo:**
+
+![Grafo Pruebas 40](Grafos42.png)
+
+
+
+## Análisis de complejidad temporal y espacial
+
+Analizamos únicamente las operaciones del algoritmo; excluimos la lectura y la impresión. Sea $n$ el número de intersecciones, $m$ el número de caminos y $k$ el número de salidas. Para Dijkstra usamos un heap con inserciones perezosas: puede contener hasta $O(n+m)$ entradas durante el recorrido.
+
+### Aporte temporal y espacial de cada función
+
+| Función o etapa | Tiempo | Espacio adicional | Aporte al problema |
+| --- | --- | --- | --- |
+| Construcción del grafo y del conjunto de salidas | $O(n+m+k)$ | $O(n+m+k)$ | Guarda cada camino en las listas de adyacencia y organiza las salidas en un conjunto. |
+| `funcion_que_indica_si_existe_una_ruta_de_escape_posible` (BFS) | $O(n+m)$ | $O(n)$ | Recorre nodos y caminos una vez para descartar casos sin una salida estructural admisible. |
+| `funcion_para_calcular_distancias_minimas` (Dijkstra desde Mumm-Ra) | $O((n+m)\log(n+m))$ | $O(n+m)$ | Calcula una vez las distancias mínimas $D_M(x)$ desde el inicio enemigo. |
+| `funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada` | $O(n+(n+m)\log(n+m))=O((n+m)\log(n+m))$ | $O(n+m)$ | Forma las cotas de seguridad por nodo y ejecuta Dijkstra desde Lion-O para una velocidad candidata. |
+| Ampliación de la cota superior | $O(d(n+m)\log(n+m))$ | $O(n+m)$ | Ejecuta la prueba de velocidad hasta encontrar una cota factible; $d$ cuenta las duplicaciones. |
+| Búsqueda binaria | $O(B(n+m)\log(n+m))$ | $O(n+m)$ | Hace una prueba por punto medio y reduce el intervalo; $B$ cuenta esas pruebas. |
+| `funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar` | $O(n+m+k+(d+B+1)(n+m)\log(n+m))$ | $O(n+m+k)$ | Coordina los casos directos, BFS, Dijkstra, la ampliación de la cota y la búsqueda binaria. | 
+
+La búsqueda comienza con $U_0=10^{12}$ y duplica esta cota si aún no es factible. Si $U$ es la cota factible alcanzada, el número de duplicaciones cumple $d=O(\max(0,\log_2(U/U_0)) )$. La búsqueda binaria reduce un intervalo inicial de ancho $U$ hasta alcanzar la precisión $\epsilon=10^{-7}$, por lo que $B=O(\max(0,\log_2(U/\epsilon)))$. El control del punto medio no aumenta estas cotas y puede hacer que la búsqueda termine antes.
+
+La construcción y BFS recorren el grafo linealmente. Dijkstra cuesta más por las operaciones del heap; la prueba de una velocidad repite ese recorrido, y la ampliación y la búsqueda binaria ejecutan varias pruebas. Por eso el número de pruebas de factibilidad multiplica el costo de Dijkstra.
+
+### Cota general de la solución
+
+Para un caso, al combinar las funciones obtenemos la cota temporal
+
+$$
+T(n,m,k)=O\!\left(n+m+k+(d+B+1)(n+m)\log(n+m)\right),
+$$
+
+que, al expresar el número de iteraciones según la búsqueda numérica, también puede escribirse como
+
+$$
+T(n,m,k,U,\epsilon)=O\!\left(n+m+k+(n+m)\log(n+m)\left[1+\log\frac{U}{U_0}+\log\frac{U}{\epsilon}\right]\right).
+$$
+
+El espacio de trabajo por caso es
+
+$$
+S(n,m,k)=O(n+m+k).
+$$
+
+Si consideramos fijo el rango numérico de búsqueda y la precisión utilizada, el número de pruebas de velocidad queda acotado. Como $k\leq n$, la cota final expresada en función del tamaño del grafo se simplifica a
+
+$$
+\boxed{T(n,m)=O((n+m)\log(n+m)),\qquad S(n,m)=O(n+m).}
+$$
+
+Si procesamos varios casos, el tiempo es la suma de las cotas de cada caso y el espacio de trabajo corresponde al caso más grande.
+
+## Cierre
+
+Concluimos que la solución final combina una representación adecuada del mapa, las distancias mínimas de Mumm-Ra, una prueba de seguridad para cada velocidad candidata y una búsqueda binaria del umbral. Las 40 trazas muestran cuándo terminamos por un caso directo, cuándo descartamos una salida mediante BFS y cuándo ejecutamos Dijkstra. La comparación con las respuestas de referencia confirmó que todas las frases coincidieron y que el error numérico quedó por debajo de la tolerancia del enunciado.
+
+# Bitácora del proyecto
+
+| Día / hora | Actividades | Trabajo y conclusiones |
+| --- | --- | --- |
+| **Oct. 28, 9:00–10:00 a. m.** | Primera lectura del documento. | Leímos el enunciado y reconocimos que se trataba de una persecución por una red de caminos, con Lion-O buscando llegar a una salida antes de ser capturado. |
+| **Oct. 28, 1:00–2:30 p. m.** | Lectura detallada del enunciado. | Identificamos las intersecciones, los caminos y sus longitudes, los inicios, las salidas y la velocidad de los mutantes. Anotamos la duda de si podía ocurrir una captura en medio de una vía. |
+| **Oct. 29, 9:00–10:00 a. m.** | Análisis del problema y de los ejemplos. | Aclaramos las dudas sobre el movimiento continuo, revisamos los ejemplos del enunciado y bosquejamos sus entradas y salidas. |
+| **Nov. 3, 9:00–10:00 a. m.** | Discusión de ideas. | Comparamos alternativas iniciales y acordamos empezar por la especificación formal del problema. |
+| **Nov. 4, 9:00 a. m.–6:00 p. m.** | Especificación de la entrada y primer caso inventado. | Escribimos la entrada como la tupla `(G, w, s, r, K, v)` y definimos el significado de cada elemento. Diseñamos un caso pequeño que pudimos revisar manualmente. |
+| **Nov. 5, 8:00 a. m.–12:00 p. m.** | Cierre de la especificación, segundo caso y repositorio. | Completamos la entrada y la salida, corregimos el primer caso, diseñamos el segundo, creamos el repositorio y empezamos a redactar el informe de la primera entrega. |
+| **Nov. 8, 9:00 a. m.–9:00 p. m.** | Correcciones, tercer caso y primeras pruebas de implementación. | Ajustamos la especificación y el segundo caso, diseñamos un tercero para situaciones límite y subimos el avance al repositorio. Empezamos a construir el grafo desde la entrada y discutimos qué algoritmos podían resolver el problema. |
+| **Nov. 9, 10:00–11:00 a. m.** | Revisión de redacción. | Leímos el informe completo, corregimos errores de escritura y unificamos la notación de la especificación y los casos. |
+| **Nov. 10, 9:00–10:00 a. m.** | Cierre de la primera entrega. | Completamos la bitácora y las secciones pendientes del informe, y revisamos el documento antes de entregarlo. |
+| **Nov. 15, 9:00–10:00 a. m.** | Selección del enfoque algorítmico. | Elegimos Dijkstra para las distancias porque las longitudes son no negativas y solo necesitamos una fuente. Analizamos la monotonía de la prueba de escape y planteamos la búsqueda binaria sobre la velocidad de Lion-O. |
+| **Nov. 16, 9:30 a. m.–12:30 p. m.** | Entrada y primer algoritmo. | Organizamos el programa alrededor de una función principal e implementamos Dijkstra desde Mumm-Ra. Concluimos que sus distancias mínimas podían reutilizarse en todas las pruebas de velocidad del caso. |
+| **Nov. 17, 10:30 a. m.–4:30 p. m.** | Dijkstra restringido para Lion-O. | Implementamos la prueba de factibilidad: desde Lion-O, Dijkstra solo acepta una llegada a un nodo si ocurre estrictamente antes que la de los mutantes para la velocidad evaluada. Revisamos que la condición de los extremos también cubriera el interior de las vías. |
+| **Nov. 18, 10:10–11:09 a. m.** | Pruebas de empates y casi empates. | Revisamos los casos en que las llegadas coinciden o difieren por poco. Confirmamos que un empate no se acepta y que la condición estricta se mantiene en las comparaciones decimales. |
+| **Nov. 19, 10:00 a. m.–2:00 p. m.** | BFS estructural e integración de la búsqueda de velocidad. | Implementamos BFS para descartar casos sin salida admisible y la función que combina los casos límite, Dijkstra desde Mumm-Ra, la ampliación de la cota y la búsqueda binaria. Corregimos los errores encontrados en las pruebas. |
+| **Nov. 20, 4:24–5:09 p. m.** | Respaldo del avance. | Subimos las primeras funciones al repositorio para que el equipo trabajara sobre una versión compartida. |
+| **Nov. 22, 10:00 a. m.–7:00 p. m.** | Casos de prueba adicionales. | Completamos la segunda función en el repositorio y diseñamos casos de tipos A, B, C y D para revisar resultados y exigencia de ejecución. |
+| **Nov. 23, 9:30–11:30 a. m.** | Integración, selección de ejemplos y consulta de dudas. | Subimos BFS, escogimos ejemplos para el informe y comparamos los tipos A y B con nuestros cálculos. Consultamos al docente las dudas que teníamos sobre los resultados esperados de C y D. |
+| **Nov. 24, 10:00 a. m.–3:00 p. m.** | Versión completa, corrección de casos imposibles y análisis. | Integramos las funciones y detectamos que, sin una salida alcanzable, la ampliación de la cota podía continuar indefinidamente. Añadimos la comprobación estructural antes de buscar velocidades, completamos la complejidad y corregimos la visualización de las fórmulas del informe. |
+| **Nov 25** | Revisión de las diferencias en los casos B y del estado de la arena. | Revisamos los casos tipo B, sus resultados de referencia, el diff local y el mensaje de la arena. Distinguimos el estado «No recibido» de un veredicto del juez y comprobamos las condiciones de precisión del enunciado. También comparamos las variantes del código para entender las diferencias en la cota, el criterio de parada, los casos límite y el formato numérico. |
+| **Nov 25** | Integración de la lógica revisada en el código final. | Integramos los cambios en el código: cota superior inicial $U_0=10^{12}$ con ampliación si hace falta, $\epsilon=10^{-7}$, protección frente a un punto medio que ya no se representa y salida con siete decimales. Revisamos también la rama de Lion-O cuando ya empieza en una salida distinta del inicio enemigo. |
+| **Nov 25** | Verificación de las referencias y carga final. | Comparamos el código integrado con 100 resultados de referencia y obtuvimos coincidencia exacta en todas las líneas. Contrastamos los 40 casos unificados con sus resultados de referencia: las frases coincidieron y el máximo error numérico fue menor que `3 × 10⁻⁷`. Después subimos la versión final y el equipo observó su aceptación en la arena. |
+
+## Evidencias de la revisión final en la arena
+
+> ![Evidencia Fallo Inicial en la Arena](Arena_Fallo.png)
+
+> ![Evidencia Aceptacion Arena](Arena_Aceptacion.png)
+
+## Estructura general del programa
+
+```text
+funcion_que_ejecuta_todo_el_programa
+├─ construye el grafo no dirigido y el conjunto de salidas
+└─ funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar
+     ├─ resuelve el inicio compartido o el inicio de Lion-O en una salida
+     ├─ funcion_que_indica_si_existe_una_ruta_de_escape_posible (BFS)
+     ├─ funcion_para_calcular_distancias_minimas (Dijkstra desde Mumm-Ra)
+     ├─ amplía la cota superior si la primera prueba no es factible
+     │    └─ funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada
+     └─ búsqueda binaria hasta epsilon = 1e-7
+          └─ funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada
+```
+
+## Pseudocódigo de la versión final
+
+```text
+para cada caso de prueba:
+    construir la lista de adyacencia y el conjunto de salidas
+    si Lion-O empieza en una salida:
+        si Lion-O y Mumm-Ra empiezan en el mismo nodo:
+            informar captura
+        si no:
+            informar 0.0000001 km/h
+    si no:
+        ejecutar BFS desde Lion-O sin entrar al inicio de Mumm-Ra
+        si no se encuentra una salida:
+            informar captura
+        si se encuentra una salida:
+            D_M <- Dijkstra desde Mumm-Ra
+            inferior <- 0
+            superior <- 1e12
+            mientras la prueba de superior no sea factible:
+                superior <- 2 * superior
+            mientras superior - inferior > 1e-7
+                    y el punto medio sea distinto de ambos extremos:
+                medio <- (inferior + superior) / 2
+                si medio es factible:
+                    superior <- medio
+                si no:
+                    inferior <- medio
+            informar superior con siete decimales
+```

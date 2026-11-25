@@ -46,29 +46,26 @@ def funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada(grafo_conexion
                 if not se_ha_logrado_un_escape:
                     for nodo_vecino, distancia_del_camino in grafo_conexiones[nodo_actual]:
                         nueva_distancia_que_se_ha_calculado = distancia_actual + distancia_del_camino
-                        if nueva_distancia_que_se_ha_calculado < distancias_a_cada_punto_de_lion[nodo_vecino] and nueva_distancia_que_se_ha_calculado < arreglo_de_distancias_maximas_permitidas_para_recorrer[nodo_vecino]:
+                        if (nueva_distancia_que_se_ha_calculado < distancias_a_cada_punto_de_lion[nodo_vecino] and nueva_distancia_que_se_ha_calculado < arreglo_de_distancias_maximas_permitidas_para_recorrer[nodo_vecino]):
                             distancias_a_cada_punto_de_lion[nodo_vecino] = nueva_distancia_que_se_ha_calculado
                             heappush(cola_de_prioridad, (nueva_distancia_que_se_ha_calculado, nodo_vecino))
     return se_ha_logrado_un_escape
 def funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar( grafo_conexiones, nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas, velocidad_de_mumm_ra ):
     velocidad_final_minima_maxima_hallada_para_escapar = None
     if nodo_de_inicio_de_lion in salidas:
-        if nodo_de_inicio_de_lion != nodo_de_inicio_de_mumm_ra: velocidad_final_minima_maxima_hallada_para_escapar = 0.0
+        if nodo_de_inicio_de_lion != nodo_de_inicio_de_mumm_ra: velocidad_final_minima_maxima_hallada_para_escapar = 1e-7
     else:
         existe_un_escape_posible = funcion_que_indica_si_existe_una_ruta_de_escape_posible( grafo_conexiones, nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas )
         if existe_un_escape_posible:
             distancias_de_mumm_ra = funcion_para_calcular_distancias_minimas( grafo_conexiones, nodo_de_inicio_de_mumm_ra)
             limite_inferior_de_la_busqueda_binaria = 0.0
-            limite_superior_de_la_busqueda_binaria = max(1.0, float(velocidad_de_mumm_ra))
-            while not funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada( grafo_conexiones, nodo_de_inicio_de_lion, salidas, velocidad_de_mumm_ra, limite_superior_de_la_busqueda_binaria, distancias_de_mumm_ra ):
+            limite_superior_de_la_busqueda_binaria = 1e12
+            while not funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada( grafo_conexiones, nodo_de_inicio_de_lion, salidas, velocidad_de_mumm_ra, limite_superior_de_la_busqueda_binaria, distancias_de_mumm_ra):
                 limite_superior_de_la_busqueda_binaria *= 2
-            epsilon = 1e-7
-            while limite_superior_de_la_busqueda_binaria - limite_inferior_de_la_busqueda_binaria > epsilon:
-                velocidad_media = ( limite_inferior_de_la_busqueda_binaria + limite_superior_de_la_busqueda_binaria ) / 2
-                if funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada( grafo_conexiones, nodo_de_inicio_de_lion, salidas, velocidad_de_mumm_ra, velocidad_media, distancias_de_mumm_ra ):
-                    limite_superior_de_la_busqueda_binaria = velocidad_media
-                else:
-                    limite_inferior_de_la_busqueda_binaria = velocidad_media
+            while (limite_superior_de_la_busqueda_binaria - limite_inferior_de_la_busqueda_binaria > 1e-7 and (limite_inferior_de_la_busqueda_binaria + limite_superior_de_la_busqueda_binaria) / 2 != limite_inferior_de_la_busqueda_binaria and (limite_inferior_de_la_busqueda_binaria + limite_superior_de_la_busqueda_binaria) / 2 != limite_superior_de_la_busqueda_binaria):
+                velocidad_media = (limite_inferior_de_la_busqueda_binaria + limite_superior_de_la_busqueda_binaria) / 2
+                if funcion_que_indica_si_se_puede_escapar_con_una_velocidad_dada( grafo_conexiones, nodo_de_inicio_de_lion, salidas, velocidad_de_mumm_ra, velocidad_media, distancias_de_mumm_ra ): limite_superior_de_la_busqueda_binaria = velocidad_media
+                else: limite_inferior_de_la_busqueda_binaria = velocidad_media
             velocidad_final_minima_maxima_hallada_para_escapar = limite_superior_de_la_busqueda_binaria
     return velocidad_final_minima_maxima_hallada_para_escapar
 def funcion_que_ejecuta_todo_el_programa():
@@ -89,6 +86,6 @@ def funcion_que_ejecuta_todo_el_programa():
         salidas = set(salida - 1 for salida in lista_de_las_salidas)
         velocidad_final_minima_maxima_hallada_para_escapar = funcion_que_encuentra_la_velocidad_minima_necesaria_para_que_lion_pueda_escapar(grafo_conexiones, nodo_de_inicio_de_lion, nodo_de_inicio_de_mumm_ra, salidas, velocidad_de_mumm_ra)
         if velocidad_final_minima_maxima_hallada_para_escapar is None: arreglo_de_respuestas_finales.append("Mumm-Ra captures Lion-O!")
-        else: arreglo_de_respuestas_finales.append(f"Lion-O can escape at a speed of {velocidad_final_minima_maxima_hallada_para_escapar:.6f} km/h!")
+        else: arreglo_de_respuestas_finales.append(f"Lion-O can escape at a speed of {velocidad_final_minima_maxima_hallada_para_escapar:.7f} km/h!")
     if arreglo_de_respuestas_finales: stdout.write("\n".join(arreglo_de_respuestas_finales) + "\n")
 if __name__ == "__main__": funcion_que_ejecuta_todo_el_programa()
