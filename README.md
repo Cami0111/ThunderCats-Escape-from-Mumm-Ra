@@ -51,6 +51,7 @@ Entonces, nuestro gran objetivo es determinar la velocidad más bajita necesaria
  - Una constante $v \in \mathbb{R}^+$, que indica la velocidad maxima inmutable de la nave de los mutantes.
 ### Salida:
 Se espera obtener un valor $S \in \mathbb{R}^+ \cup \{None\}$, el cual es función estrictamente de los datos definidos en la entrada $(G, w, s, r, K, v)$. El valor de $S$ se define formalmente a través de la siguiente expresión:
+
 $$
 S = 
 \begin{cases} 
@@ -58,6 +59,7 @@ S =
 None& \text{si no existe tal } v_L \text{ para ninguna trayectoria } \gamma 
 \end{cases}
 $$
+
 ### **Donde se definen los siguientes términos:**
 *   $v_L \in \mathbb{R}^+$ es una velocidad constante hipotética para Lion-O. La salida $S$ busca el mínimo valor posible de esta variable que satisfaga la inecuación.
 *   $\Gamma(s, K)$ es el conjunto de todas las trayectorias continuas posibles en el grafo $G$ que inician en $s$ y terminan en algún vértice $k \in K$.
