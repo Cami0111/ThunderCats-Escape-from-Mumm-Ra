@@ -1492,7 +1492,7 @@ Analizamos únicamente las operaciones del algoritmo; excluimos la lectura y la 
 
 ### Aporte temporal y espacial de cada función
 
-| Función o etapa | Tiempo | Espacio adicional | Aporte al problema |
+| Función o etapa | Tiempo                                               | Espacio adicional     | Aporte al problema |
 | --- | --- | --- | --- |
 | Construcción del grafo y del conjunto de salidas | $O(n+m+k)$ | $O(n+m+k)$ | Guarda cada camino en las listas de adyacencia y organiza las salidas en un conjunto. |
 | `funcion_que_indica_si_existe_una_ruta_de_escape_posible` (BFS) | $O(n+m)$ | $O(n)$ | Recorre nodos y caminos una vez para descartar casos sin una salida estructural admisible. |
